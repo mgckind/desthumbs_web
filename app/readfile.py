@@ -48,6 +48,7 @@ class FileHandler(BaseHandler):
             titles.append(title)
             pngfiles.append(mypath+title+'.tif.png')
         
+        if os.path.exists(user_folder+"list.json"): os.remove(user_folder+"list.json")
         with open(user_folder+"list.json","w") as outfile:
             json.dump([dict(name=pngfiles[i],title=titles[i]) for i in range(len(pngfiles))], outfile, indent=4)
 
