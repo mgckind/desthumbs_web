@@ -34,18 +34,22 @@ class FileHandler(BaseHandler):
         fh.write(fileinfo['body'])
         fh.close()
         #RUN DESTHUMBS
-        mypath = 'static/uploads/'
+        comm = "makeDESthumbs  %s --user demo_user --password user_demo --MP --outdir=%s" % (user_folder + cname, user_folder)
+        print comm
+        os.system(comm)
+        mypath = '/static/uploads/'+self.current_user.replace('\"','')+'/'
 
-        pngfiles=glob.glob(mypath+'*.png')
+        tiffiles=glob.glob(user_folder+'*.tif')
         titles=[]
-        for f in pngfiles:
-            titles.append(f.split('/')[-1][:-4])
-
-
+        pngfiles=[]
+        for f in tiffiles:
+            title=f.split('/')[-1][:-4]
+            os.system("convert %s %s.png" % (f,f))
+            titles.append(title)
+            pngfiles.append(mypath+title+'.tif.png')
+        
         with open(user_folder+"list.json","w") as outfile:
-            json.dump([dict(name='/'+pngfiles[i],title=titles[i]) for i in range(len(pngfiles))], outfile, indent=4)
-
-        time.sleep(5)
+            json.dump([dict(name=pngfiles[i],title=titles[i]) for i in range(len(pngfiles))], outfile, indent=4)
 
         self.set_status(200)
         #self.redirect(self.get_argument("next", u"/results/"))

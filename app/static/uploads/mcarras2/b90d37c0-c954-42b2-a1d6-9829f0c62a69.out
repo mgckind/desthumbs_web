@@ -1,8 +1,0 @@
-Traceback (most recent call last):
-  File "png2tile.py", line 1, in <module>
-    from PIL import Image, ImageFilter
-ImportError: No module named PIL
-/Users/Matias/Library/Enthought/Canopy_64bit/User/lib/python2.7/site-packages/PIL/Image.py:2210: DecompressionBombWarning: Image size (100000000 pixels) exceeds limit of 89478485 pixels, could be decompression bomb DOS attack.
-  DecompressionBombWarning)
-6
-34.74145 seconds
