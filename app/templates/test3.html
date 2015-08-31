@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block extra_head_content  %}
+
+<link rel="import" href="/static/logout-button.html">
+<link rel="import" href="/static/des-toolbar.html">
+<style is="custom-style">
+
+      body {
+      font-family: 'Roboto', 'Noto', sans-serif;
+      font-size: 18px;
+      margin: 0;
+      background-color: var(--paper-blue-50);
+    }
+
+    #cards {
+
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    paper-card {
+      width: 400px;
+      margin-bottom: 16px;
+    }
+
+</style>
+{% end %}
+
+
+{% block content %}
+      <des-toolbar iconname="arrow-back"></des-toolbar>
+
+    <div class="horizontal layout center-justified" style= "padding:40px">
+      
+      <paper-card heading="Welcome "> 
+      <div class="card-content">
+      Lorem ipsum dolor sit amet, consectetur adipiscing eli<br>
+       Suspendisse felis dolor, hendrerit et erat eu, blandit <br>
+       </div> 
+      <logout-button bname=" Logout"></logout-button>
+      </paper-card>
+
+      </div>
+
+    
+{% end %}

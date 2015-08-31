@@ -1,0 +1,42 @@
+<link rel="import" href="bower_components/polymer/polymer.html">
+<!-- import the iron-input custom element -->
+<link rel="import" href="bower_components/paper-button/paper-button.html">
+
+<dom-module id="my-button">
+
+  <style>
+    .mycolors {
+    background: white;
+    color: blue;
+    }
+    .mycolors::shadow paper-ripple {
+    color: red;
+    }
+    .mycolors:hover{
+        background:  rgba(255, 0, 0, .1);
+    }
+  </style>
+
+  <template>
+    <p>
+    This is a button.
+    </p>
+    <paper-button  class="mycolors"   link="http://twitter.com/" on-tap="{{goLink}}">{{bname}}</paper-button>
+  </template>
+
+  <script>
+    Polymer({
+      is: "my-button",
+      goLink: function(e) {
+      window.location.href = e.target.getAttribute('link');
+      },
+      properties: {
+        bname: {
+          type: String,
+          value: "check"
+        },
+      }
+    });
+  </script>
+
+</dom-module>

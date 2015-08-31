@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block extra_head_content  %}
+
+<link rel="import" href="/static/logout-button.html">
+<link rel="import" href="/static/input-file.html">
+<link rel="import" href="/static/read-file-button.html">
+<link rel="import" href="/static/des-toolbar.html">
+      <link href="/static/bower_components/iron-icons/iron-icons.html" rel="import">
+<style is="custom-style">
+
+      body {
+      font-family: 'Roboto', 'Noto', sans-serif;
+      font-size: 18px;
+      margin: 0;
+      background-color: var(--paper-blue-10);
+    }
+
+    #cards {
+
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    paper-card {
+      width: 400px;
+      margin-bottom: 16px;
+    }
+
+  }
+</style>
+{% end %}
+
+
+{% block content %}
+      <des-toolbar iconname="menu" ></des-toolbar>
+
+
+    <div class="horizontal layout center-justified" style= "padding:40px">
+      
+
+
+      <paper-card heading="File "> 
+        <div class="card-content">
+      Upload the file and run the desthumb generator
+       </div>
+         <read-file-button></read-file-button>
+      </paper-card>
+
+      </div>
+
+    
+{% end %}
+
+
+

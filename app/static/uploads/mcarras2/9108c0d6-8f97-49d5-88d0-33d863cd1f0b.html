@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+ <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+<script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v0.0.4/Leaflet.fullscreen.min.js'></script>
+<link href='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v0.0.4/leaflet.fullscreen.css' rel='stylesheet' />
+<script src='Leaflet.MousePosition/src/L.Control.MousePosition.js'></script>
+<link href='Leaflet.MousePosition/src/L.Control.MousePosition.css' rel='stylesheet' />
+<script src='Leaflet.Coordinates/dist/Leaflet.Coordinates-0.1.4.src.js'></script>
+<link href='Leaflet.Coordinates/dist/Leaflet.Coordinates-0.1.4.css' rel='stylesheet' />
+<script src="Leaflet.TileLayer.IIP/TileLayer.IIP.js"></script>
+</head>
+<body>
+
+
+ <div id="map" style="height:512px; width:512px"></div>
+ <script>
+
+var mapa1 = L.tileLayer('tiles_des/{z}/{x}/{y}.png', {
+  maxZoom: 6,
+  continuousWorld : true,
+  noWrap : true,
+  tilesize : 157,
+  attribution: 'MCK',
+});
+
+
+
+    L.CRS.RADEC = L.extend({}, L.CRS, {
+        projection: L.Projection.LonLat,
+        transformation: new L.Transformation(1, 0, 1, 0),
+        scale: function (zoom) {
+            return Math.pow(2, zoom);
+        },
+        latLngToPoint: function(latlng, zoom) {
+            var adjlatlng = L.latLng((latlng.lat-this.adjust.y)/this.adjust.scale.y, (latlng.lng-this.adjust.x)/this.adjust.scale.x);
+            return L.CRS.Simple.latLngToPoint(adjlatlng, zoom);
+        },
+        pointToLatLng: function(point, zoom) {
+            var latlng = L.CRS.Simple.pointToLatLng(point, zoom);
+            latlng.lng = (latlng.lng*this.adjust.scale.x)+this.adjust.x;
+            latlng.lat = (latlng.lat*this.adjust.scale.y)+this.adjust.y;
+            return latlng;
+        },
+        adjust: {
+            x: 322.477471+0.713943,
+            y: 0.713879+0.373611,
+            scale: {
+                x:-0.00454741/1.6306, //157/ra_range
+                y:0.0045470/1.6306
+            }
+        }
+    });
+
+
+var map = new L.Map('map', {
+  center: [0.7305505, 322.8344425],
+  crs: L.CRS.RADEC,
+  zoomControl : true,
+  attributionControl : false,
+  minZoom: 0,
+  maxZoom: 6,	
+  zoom: 1,
+  layers: [mapa1]
+});
+
+
+
+
+//var layers = L.control.layers({}, {
+//  'Map1': mapa1
+//}).addTo(map);
+
+L.control.fullscreen().addTo(map);
+//L.control.mousePosition({lngFirst: true, prefix : 'RA,DEC = '}).addTo(map);
+
+L.control.attribution({prefix:false}).addTo(map);
+
+
+L.control.coordinates({
+    position:"bottomleft", //optional default "bootomright"
+    decimals:5, //optional default 4
+    decimalSeperator:".", //optional default "."
+    labelTemplateLat:"DEC: {y}", //optional default "Lat: {y}"
+    labelTemplateLng:"RA: {x}", //optional default "Lng: {x}"
+    enableUserInput:true, //optional default true
+    useDMS:false, //optional default false
+    useLatLngOrder: false //ordering of labels, default false-> lng-lat
+}).addTo(map);
+
+</script>
+</body>
+</html>

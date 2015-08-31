@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block extra_head_content  %}
+<link rel="import" href="/static/bower_components/polymer/polymer.html">
+<link rel="import" href="/static/des-toolbar.html">
+<link rel="import" href="/static/des-thumb.html">
+<link rel="import" href="/static/bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="/static/bower_components/paper-material/paper-material.html">
+<style is="custom-style">
+
+      body {
+      font-family: 'Roboto', 'Noto', sans-serif;
+      font-size: 18px;
+      margin: 0;
+      background-color: var(--paper-blue-50);
+    }
+
+
+</style>
+{% end %}
+
+{% block content %}
+      <des-toolbar iconname="arrow-back"></des-toolbar>
+
+      <paper-button raised onclick="getall()"> Download all</paper-button> <br>
+      <template id="Demo" is="dom-bind"> 
+      <template  is="dom-repeat" items="[[objs]]">
+      <des-thumb imdisplay="[[item.name]]" imtitle="[[item.title]]"></des-thumb>
+
+      </template>
+      </template>
+
+   
+
+   <script>
+
+   var xmlhttp = new XMLHttpRequest();
+   var url = "/static/uploads/test.json";
+   var url2 = "/static/uploads/{{username}}/list.json";
+   console.log(url2);
+   xmlhttp.onreadystatechange=function(){
+    if (xmlhttp.readyState ==4 && xmlhttp.status == 200){
+      Demo.objs = JSON.parse(xmlhttp.responseText);
+    }
+   }
+   xmlhttp.open("GET", url2, true);
+   xmlhttp.send();
+
+   function getall(){
+      console.log('download all');
+      var link = document.createElement('a');
+        link.href = "/static/uploads/all.tar.gz";
+        if (link.download !== undefined){
+            //Set HTML5 download attribute. This will prevent file from opening if supported.
+            var fileName = link.href.substring(link.href.lastIndexOf('/') + 1, link.href.length);
+            link.download = fileName;
+          }
+          if (document.createEvent) {
+            var e = document.createEvent('MouseEvents');
+            e.initEvent('click' ,true ,true);
+            link.dispatchEvent(e);
+            return true;
+          }
+
+            var query = '?download';
+            window.open(link.href + query);
+     //window.open(this.imdisplay,'_self');
+     
+   }
+
+
+
+   </script> 
+{% end %}

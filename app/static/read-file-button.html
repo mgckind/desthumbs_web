@@ -1,0 +1,123 @@
+<link rel="import" href="/static/bower_components/polymer/polymer.html">
+<link rel="import" href="/static/bower_components/paper-button/paper-button.html">
+<link rel="import" href="/static/bower_components/paper-icon-button/paper-icon-button.html">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<link rel="import" href="/static/input-file.html">
+
+<dom-module id="read-file-button">
+  <style>
+    :host {
+      display: block;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #f1_upload_process{
+   z-index:100;
+   position:absolute;
+   visibility:hidden;
+   text-align:center;
+   width:400px;
+   margin:0px;
+   padding:0px;
+   background-color:#fff;
+   border:1px solid #ccc;
+}
+ 
+form{
+   text-align:center;
+   width:390px;
+   margin:0px;
+   padding:5px;
+   background-color:#fff;
+   border:1px solid #ccc;
+ 
+}
+
+  </style>
+
+  <template>
+
+    <input-file id="input_file_id"></input-file>
+    <paper-button id="upbutton" raised on-click="submit" disabled>
+      Run!
+    </paper-button>
+    <paper-spinner id="spinner_up" class="big"></paper-spinner>
+    <br>
+    <br> 
+    <br> 
+    <br> 
+    <paper-button id="seeresults" on-click="results" >
+      See Results
+    </paper-button>
+
+
+  </template>
+
+<script>
+
+    (function() {
+      Polymer({
+        is: 'read-file-button',
+        properties: {
+        },
+        beforeSendHandler: function(){
+          //var button1 = document.getElementById('upbutton');
+          //button1.disabled = true;
+          $('#upbutton')[0].disabled=true;
+          $('#inputfilebutton')[0].disabled=true;
+          $('#spinner_up')[0].active = true;
+        },
+        errorHandler: function(){
+          console.log('NOOOO');
+          $('#upbutton')[0].disabled=false;
+          $('#inputfilebutton')[0].disabled=false;
+          $('#input_file_id')[0].clear();
+          $('#spinner_up')[0].active = false;
+        },
+        completeHandler: function(){
+        console.log('YESSSSS');
+        console.log('load complete');
+          $('#upbutton')[0].disabled=false;
+          $('#inputfilebutton')[0].disabled=false;
+          $('#input_file_id')[0].clear();
+          $('#spinner_up')[0].active = false;
+          $('#seeresults')[0].disabled = false;
+          window.location.href="/results/";
+        },
+        results: function(event){
+          window.location.href = "/results/";
+        },
+        submit : function(event){
+          var formdata = new FormData();
+          formdata.append('csvfile', this.$.input_file_id.file);
+          formdata.append('id', 'testId');
+
+             $.ajax({
+             url: '/readfile/',  //Server script to process data
+            type: 'POST',
+            //xhr: function() {  // Custom XMLHttpRequest
+              //var myXhr = $.ajaxSettings.xhr();
+               //if(myXhr.upload){ // Check if upload property exists
+                //myXhr.upload.addEventListener('progress',progressHandlingFunction, false); // For handling the progress of the upload
+            //}
+            //return myXhr;
+        //},
+        //Ajax events
+        beforeSend: this.beforeSendHandler,
+        success: this.completeHandler,
+        error: this.errorHandler,
+        // Form data
+        data: formdata,
+        //Options to tell jQuery not to process data or worry about content-type.
+        cache: false,
+        contentType: false,
+        processData: false
+    });
+          //this.clear();
+        
+            },
+      })
+    })();
+</script>
+</dom-module>

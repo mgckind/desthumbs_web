@@ -1,0 +1,36 @@
+<link rel="stylesheet" href="/static/font-awesome/font-awesome-4.4.0/css/font-awesome.min.css">
+<link rel="import" href="/static/bower_components/paper-button/paper-button.html">
+<link rel="import" href="/static/bower_components/paper-styles/color.html">
+
+<dom-module id="logout-button">
+
+  <style>
+    .mycolors {
+    background: pink;
+    color: white;
+    }
+    .mycolors::shadow paper-ripple {
+    color: black;
+    }
+    .mycolors:hover{
+        background: red;
+    }
+  </style>
+
+  <template>
+    <paper-button  raised class="mycolors"  onclick="window.open('/auth/logout/','_self',false);"><i class="fa fa-sign-out"></i>{{bname}}</paper-button>
+  </template>
+
+  <script>
+    Polymer({
+      is: "logout-button",
+      properties: {
+        bname: {
+          type: String,
+          value: "check"
+        },
+      }
+    });
+  </script>
+
+</dom-module>

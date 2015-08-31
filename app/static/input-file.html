@@ -1,0 +1,57 @@
+<link rel="import" href="/static/bower_components/polymer/polymer.html">
+<link rel="import" href="/static/bower_components/paper-button/paper-button.html">
+
+<dom-module id="input-file">
+  <style>
+    :host {
+      display: block;
+      position: relative;
+      overflow: hidden;
+    }
+    .upload{
+      position: absolute;
+      opacity: 0;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+    }
+  </style>
+
+  <template>
+    <paper-button id='inputfilebutton' raised>
+      <span>[[file_name]]</span>
+      <input type="file" class="upload" id="file" on-change="_fileChange"/>
+    </paper-button>
+  </template>
+
+
+
+<script>
+(function() {
+  Polymer({
+    is: 'input-file',
+    properties: {
+      file_name : {
+        type : String,
+        value : "Upload File"
+      }
+    },
+    get file(){
+      return this.$.file.files[0]
+    },
+    _fileChange: function(){
+      this.file_name = this.file.name;
+      console.log('File to read : ' + this.file_name );
+      $('#upbutton')[0].disabled=false;
+      $('#seeresults')[0].disabled=true;
+
+    },
+    clear: function(){
+      this.file_name = "Upload File";
+      this.$.file.value = "";
+    },
+  });
+})();
+</script>
+</dom-module>
