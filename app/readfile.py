@@ -58,7 +58,7 @@ class FileHandler(BaseHandler):
             pngfiles.append(mypath+title+'.tif.png')
        
 
-        os.system("tar -zcf "+user_folder+"all.tar.gz "+user_folder+"*") 
+        os.system("tar -zcf "+user_folder+"all.tar.gz "+user_folder+"* --strip-components=6") 
         if os.path.exists(user_folder+"list.json"): os.remove(user_folder+"list.json")
         with open(user_folder+"list.json","w") as outfile:
             json.dump([dict(name=pngfiles[i],title=titles[i]) for i in range(len(pngfiles))], outfile, indent=4)
