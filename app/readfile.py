@@ -42,9 +42,9 @@ class FileHandler(BaseHandler):
         fh.close()
         #RUN DESTHUMBS
         comm = "makeDESthumbs  %s --user demo_user --password user_demo --MP --outdir=%s" % (user_folder + cname, user_folder)
+        if xs != None: comm += ' --xsize %s ' % xs
+        if ys != None: comm += ' --ysize %s ' % ys
         print comm
-        if xs != None: comm += '--xsize %s' % xs
-        if ys != None: comm += '--ysize %s' % ys
         os.system(comm)
         mypath = '/static/uploads/'+self.current_user.replace('\"','')+'/'
 
