@@ -48,7 +48,7 @@
    function getall(){
       console.log('download all');
       var link = document.createElement('a');
-        link.href = "/static/uploads/{{username}}/all.tar.gz";
+        link.href = "/static/uploads/{{username}}/results/all.tar.gz";
         if (link.download !== undefined){
             //Set HTML5 download attribute. This will prevent file from opening if supported.
             var fileName = link.href.substring(link.href.lastIndexOf('/') + 1, link.href.length);

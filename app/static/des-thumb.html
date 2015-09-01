@@ -65,7 +65,7 @@
 
     paper-dialog {
       position: fixed;
-      max-width: 60%;
+      max-width: 600px;
       top: 16px;
     }
 
@@ -92,7 +92,7 @@
       <h2>{{_returnName(imtitle)}}</h2>
       <img class = "Image" src={{imdisplay}} />
         <div class="buttons">
-        <paper-button dialog-dismiss raised>Close</paper-button>
+        <paper-button dialog-dismiss autofocus raised>Close</paper-button>
         <paper-button on-click="download" raised> Download</paper-button>
       </div>
     </paper-dialog>

@@ -59,7 +59,7 @@ paper-input {
 
     <div class="horizontal layout around-justified" >
     <input-file id="input_file_id"></input-file>
-    <paper-button raised class="blue"> Enter values</paper-button>
+    <paper-button raised class="blue" id="entervalues"> Enter values</paper-button>
     </div>
     <br>
    <hr> 
@@ -98,12 +98,13 @@ paper-input {
           //var button1 = document.getElementById('upbutton');
           //button1.disabled = true;
           $('#upbutton')[0].disabled=true;
+          $('#entervalues')[0].disabled=true;
           $('#inputfilebutton')[0].disabled=true;
           $('#spinner_up')[0].active = true;
         },
         errorHandler: function(){
           console.log('NOOOO');
-          $('#upbutton')[0].disabled=false;
+          $('#entervalues')[0].disabled=false;
           $('#inputfilebutton')[0].disabled=false;
           $('#input_file_id')[0].clear();
           $('#spinner_up')[0].active = false;
@@ -112,6 +113,7 @@ paper-input {
         console.log('YESSSSS');
         console.log('load complete');
           $('#upbutton')[0].disabled=false;
+          $('#entervalues')[0].disabled=false;
           $('#inputfilebutton')[0].disabled=false;
           $('#input_file_id')[0].clear();
           $('#spinner_up')[0].active = false;

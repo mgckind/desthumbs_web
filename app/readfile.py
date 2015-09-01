@@ -37,18 +37,19 @@ class FileHandler(BaseHandler):
         cname = str(uuid.uuid4()) + extn
         user_folder=os.path.join(Settings.UPLOADS,self.current_user.replace('\"','')) + '/'
         os.system('rm -f '+user_folder+'*.*')
+        os.system('rm -rf '+user_folder+'results/')
         fh = open( user_folder + cname, 'w')
         fh.write(fileinfo['body'])
         fh.close()
         #RUN DESTHUMBS
-        comm = "makeDESthumbs  %s --user demo_user --password user_demo --MP --outdir=%s" % (user_folder + cname, user_folder)
+        comm = "makeDESthumbs  %s --user demo_user --password user_demo --MP --outdir=%s" % (user_folder + cname, user_folder+'results/')
         if xs != "": comm += ' --xsize %s ' % xs
         if ys != "": comm += ' --ysize %s ' % ys
         print comm
         os.system(comm)
-        mypath = '/static/uploads/'+self.current_user.replace('\"','')+'/'
+        mypath = '/static/uploads/'+self.current_user.replace('\"','')+'/results/'
 
-        tiffiles=glob.glob(user_folder+'*.tif')
+        tiffiles=glob.glob(user_folder+'results/*.tif')
         titles=[]
         pngfiles=[]
         for f in tiffiles:
@@ -57,8 +58,9 @@ class FileHandler(BaseHandler):
             titles.append(title)
             pngfiles.append(mypath+title+'.tif.png')
        
-
-        os.system("tar -zcf "+user_folder+"all.tar.gz "+user_folder+"* --strip-components=6") 
+        os.chdir(user_folder)
+        os.system("tar -zcf results/all.tar.gz results/") 
+        os.chdir(os.path.dirname(__file__))
         if os.path.exists(user_folder+"list.json"): os.remove(user_folder+"list.json")
         with open(user_folder+"list.json","w") as outfile:
             json.dump([dict(name=pngfiles[i],title=titles[i]) for i in range(len(pngfiles))], outfile, indent=4)
