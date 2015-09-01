@@ -26,6 +26,8 @@ class FileHandler(BaseHandler):
         print '+-+-+-+-',xs
         ys = self.get_argument("ysize")
         print '+-+-+-+-',ys
+        check = self.get_argument("check")
+        print '+-+-+-+-',check
         print self.current_user
         fileinfo = self.request.files["csvfile"][0]
         print fileinfo['filename']

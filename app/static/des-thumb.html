@@ -4,7 +4,8 @@
 <link rel="import" href="/static/bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="/static/bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
  <link rel="import" href="/static/bower_components/neon-animation/neon-animations.html">
- <link rel="import" href="/static/bower_components/iron-flex-layout/classes/iron-flex-layout.html">
+     <link rel="import" href="/static/bower_components/iron-flex-layout/classes/iron-flex-layout.html">
+     <link rel="import" href="/static/bower_components/iron-flex-layout/iron-flex-layout.html">
 
 <script src="/static/page.js/page.js"></script>
 
@@ -65,7 +66,6 @@
     paper-dialog {
       position: fixed;
       max-width: 60%;
-      left: 1%;
       top: 16px;
     }
 
@@ -87,6 +87,7 @@
     <paper-icon-button icon="power-settings-new" ></paper-icon-button>
       </paper-card>-->
       </paper-material>
+    <div class="horizontal layout center-justified" >
       <paper-dialog id="{{_returnName(imtitle)}}" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
       <h2>{{_returnName(imtitle)}}</h2>
       <img class = "Image" src={{imdisplay}} />
@@ -95,6 +96,7 @@
         <paper-button on-click="download" raised> Download</paper-button>
       </div>
     </paper-dialog>
+    </div>
 
 </template>
 
@@ -133,9 +135,9 @@
         console.log(this.imtitle);
         var dialog = document.getElementById(this.imtitle);
         var dialog_img = document.getElementById(this.imtitle).getElementsByClassName("Image")[0];
-        var ww = ($(window).width())/2.-dialog_img.width/2.;
+        //var ww = ($(window).width())/2.-dialog_img.width/2.;
         //console.log(dialog_img.width+'px');
-        dialog.style.left=ww+"px";
+        //dialog.style.left=ww+"px";
         dialog.open();
       },
 

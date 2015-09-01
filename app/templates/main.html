@@ -4,6 +4,7 @@
 <link rel="import" href="/static/logout-button.html">
 <link rel="import" href="/static/input-file.html">
 <link rel="import" href="/static/read-file-button.html">
+<link rel="import" href="/static/read-form-button.html">
 <link rel="import" href="/static/des-toolbar.html">
       <link href="/static/bower_components/iron-icons/iron-icons.html" rel="import">
 <style is="custom-style">
@@ -17,12 +18,12 @@
 
     #cards {
 
-      max-width: 400px;
+      max-width: 500px;
       margin-left: auto;
       margin-right: auto;
     }
     paper-card {
-      width: 400px;
+      width: 500px;
       margin-bottom: 16px;
     }
 
@@ -35,18 +36,17 @@
       <des-toolbar iconname="menu" ></des-toolbar>
 
 
-    <div class="horizontal layout center-justified" style= "padding:40px">
+    <div class="horizontal center-justified layout" style= "padding:40px">
       
-
-
-      <paper-card heading="File "> 
+      <paper-card heading="Upload positions ">
         <div class="card-content">
-      Upload the file and run the desthumb generator
+      Upload the file with the positions or enter the positions by hand and run the desthumb generator
        </div>
          <read-file-button></read-file-button>
       </paper-card>
 
-      </div>
+         </div>
+
 
     
 {% end %}

@@ -3,11 +3,12 @@
 <link rel="import" href="/static/bower_components/paper-icon-button/paper-icon-button.html"><link rel="stylesheet" href="/static/font-awesome/font-awesome-4.4.0/css/font-awesome.min.css">
      <link rel="import" href="/static/bower_components/iron-flex-layout/classes/iron-flex-layout.html">
      <link rel="import" href="/static/bower_components/iron-flex-layout/iron-flex-layout.html">
+     <link rel="import" href="/static/bower_components/iron-autogrow-textarea/iron-autogrow-textarea.html">
 <link rel="import" href="/static/bower_components/paper-checkbox/paper-checkbox.html">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <link rel="import" href="/static/input-file.html">
 
-<dom-module id="read-file-button">
+<dom-module id="read-form-button">
   <style>
     :host {
       display: block;
@@ -44,23 +45,13 @@ form{
 paper-input {
   width:50%;
 }
-
-      paper-button.blue {
-      color: var(--paper-light-blue-500);
-      --paper-button-flat-focus-color: var(--paper-light-blue-50);
-    }
-    paper-button.blue:hover {
-      background: var(--paper-light-blue-50);
-    }
   </style>
 
   <template>
 
 
-    <div class="horizontal layout around-justified" >
-    <input-file id="input_file_id"></input-file>
-    <paper-button raised class="blue"> Enter values</paper-button>
-    </div>
+    
+    <iron-autogrow-textarea max-rows="3" rows="3"></iron-autogrow-textarea>
     <br>
    <hr> 
     <b> Extra options </b>
@@ -91,7 +82,7 @@ paper-input {
 
     (function() {
       Polymer({
-        is: 'read-file-button',
+        is: 'read-form-button',
         properties: {
         },
         beforeSendHandler: function(){
