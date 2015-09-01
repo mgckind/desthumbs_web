@@ -71,7 +71,7 @@
 </style>
 
 <template>
-      <paper-material elevation="[[_elevation]]" on-mouseover="_mouseover" on-mouseout="_mouseout" on-click="openBig">
+      <paper-material  elevation="[[_elevation]]" on-mouseover="_mouseover" on-mouseout="_mouseout" on-click="openBig">
       <div class="mycard"> <div style="position:absolute;"> <span>{{_returnName(imtitle)}}</span> </div> <img src={{imdisplay}} height="200px" width="200px" /> 
       <div style="position:absolute; right:10px; bottom:10px"> 
       <paper-icon-button id="downid" icon="file-download" class="mycolors" on-click="download">
@@ -100,6 +100,7 @@
 </template>
 
 <script>
+     var singlepath = "";
     (function(){
       Polymer({
       is: "des-thumb",
@@ -109,6 +110,7 @@
           value: 0,
         },
         imdisplay:{
+          type: String,
           value: "/static/uploads/test1.png"
         },
         imtitle:{
@@ -140,13 +142,17 @@
         dialog.open();
       },
 
-      download: function(event){
-        event.stopPropagation();
+
+       completeHandler: function(){
+        //console.log(singlepath.replace('.tif.png','.tar.gz'));
         var link = document.createElement('a');
-        link.href = this.imdisplay;
+        var pathL = singlepath.replace('.tif.png','.tar.gz');
+        link.href = pathL; //pathL.replace(".tif.png",".tar.gz");
+        console.log(link.href);
+    
         if (link.download !== undefined){
             //Set HTML5 download attribute. This will prevent file from opening if supported.
-            var fileName = this.imdisplay.substring(this.imdisplay.lastIndexOf('/') + 1, this.imdisplay.length);
+            var fileName = pathL.substring(pathL.lastIndexOf('/') + 1, pathL.length);
             link.download = fileName;
           }
           if (document.createEvent) {
@@ -157,14 +163,36 @@
           }
 
             var query = '?download';
-            window.open(this.imdisplay + query);
+            window.open(pathL + query);
      //window.open(this.imdisplay,'_self');
-     }
+     },
+      errorHandler: function(){
+          console.log('Oh no!');
+        },
+
+      download: function(event){
+        event.stopPropagation();
+        var data = new FormData();
+        singlepath = this.imdisplay;
+        data.append('title', this.imtitle);
+        $.ajax({
+             url: '/single/',  //Server script to process data
+             type: 'POST',
+             data: data,
+             success: this.completeHandler,
+             error: this.errorHandler,
+             //Options to tell jQuery not to process data or worry about content-type.
+             cache: false,
+             contentType: false,
+             processData: false
+           });
+      },
 
 
     
     });
     })();
+
 </script>
 
 </dom>
