@@ -36,12 +36,15 @@ class FileHandler(BaseHandler):
         extn = os.path.splitext(fname)[1]
         cname = str(uuid.uuid4()) + extn
         user_folder=os.path.join(Settings.UPLOADS,self.current_user.replace('\"','')) + '/'
+        os.system('rm -f '+user_folder+'*.*')
         fh = open( user_folder + cname, 'w')
         fh.write(fileinfo['body'])
         fh.close()
         #RUN DESTHUMBS
         comm = "makeDESthumbs  %s --user demo_user --password user_demo --MP --outdir=%s" % (user_folder + cname, user_folder)
         print comm
+        if xs != None: comm += '--xsize %s' % xs
+        if ys != None: comm += '--ysize %s' % ys
         os.system(comm)
         mypath = '/static/uploads/'+self.current_user.replace('\"','')+'/'
 
