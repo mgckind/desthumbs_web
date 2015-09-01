@@ -1,6 +1,7 @@
 <link rel="import" href="/static/bower_components/polymer/polymer.html">
 <link rel="import" href="/static/bower_components/paper-button/paper-button.html">
 <link rel="import" href="/static/bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="/static/bower_components/paper-toggle-button/paper-toggle-button.html">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <link rel="import" href="/static/input-file.html">
 
@@ -39,6 +40,12 @@ form{
   <template>
 
     <input-file id="input_file_id"></input-file>
+
+    <br>
+    <paper-input id="xsizeid" name="xsize" label="xsize (arcmin)" auto-validate pattern="[0-9]*" error-message="numbers only!"></paper-input>
+    <paper-input id="ysizeid" name="ysize" label="ysize (arcmin)" auto-validate pattern="[0-9]*" error-message="numbers only!"></paper-input>
+    <paper-toggle-button></paper-toggle-button><span> Generate pngs?</span><br>
+
     <paper-button id="upbutton" raised on-click="submit" disabled>
       Run!
     </paper-button>
@@ -92,6 +99,8 @@ form{
           var formdata = new FormData();
           formdata.append('csvfile', this.$.input_file_id.file);
           formdata.append('id', 'testId');
+          formdata.append('xsize', document.getElementById("xsizeid").value);
+          formdata.append('ysize', document.getElementById("ysizeid").value);
 
              $.ajax({
              url: '/readfile/',  //Server script to process data

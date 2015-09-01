@@ -22,6 +22,10 @@ class FileHandler(BaseHandler):
     def post(self):
         id1 = self.get_argument("id")
         print '+-+-+-+-',id1
+        xs = self.get_argument("xsize")
+        print '+-+-+-+-',xs
+        ys = self.get_argument("ysize")
+        print '+-+-+-+-',ys
         print self.current_user
         fileinfo = self.request.files["csvfile"][0]
         print fileinfo['filename']
