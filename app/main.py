@@ -11,6 +11,7 @@ import login
 import test
 import readfile
 import results
+import download
 
 define("port", default=8888, help="run on the given port", type=int)
 
@@ -26,6 +27,7 @@ class Application(tornado.web.Application):
             (r"/list/", login.MainHandler),
             (r"/readfile/", readfile.FileHandler),
             (r"/results/", results.DisplayHandler),
+            (r"/single/", download.DownloadHandler),
             (r"/deslabs", tornado.web.RedirectHandler,
         dict(url="http://deslabs.ncsa.illinois.edu/")),
         ]

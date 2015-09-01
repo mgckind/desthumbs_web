@@ -36,7 +36,6 @@
    var xmlhttp = new XMLHttpRequest();
    var url = "/static/uploads/test.json";
    var url2 = "/static/uploads/{{username}}/list.json";
-   console.log(url2);
    xmlhttp.onreadystatechange=function(){
     if (xmlhttp.readyState ==4 && xmlhttp.status == 200){
       Demo.objs = JSON.parse(xmlhttp.responseText);

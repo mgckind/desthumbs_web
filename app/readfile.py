@@ -36,8 +36,10 @@ class FileHandler(BaseHandler):
         extn = os.path.splitext(fname)[1]
         cname = str(uuid.uuid4()) + extn
         user_folder=os.path.join(Settings.UPLOADS,self.current_user.replace('\"','')) + '/'
+        
         os.system('rm -f '+user_folder+'*.*')
         os.system('rm -rf '+user_folder+'results/')
+        
         fh = open( user_folder + cname, 'w')
         fh.write(fileinfo['body'])
         fh.close()
@@ -52,6 +54,7 @@ class FileHandler(BaseHandler):
         tiffiles=glob.glob(user_folder+'results/*.tif')
         titles=[]
         pngfiles=[]
+        Ntiles = len(tiffiles)
         for f in tiffiles:
             title=f.split('/')[-1][:-4]
             os.system("convert %s %s.png" % (f,f))
@@ -63,10 +66,8 @@ class FileHandler(BaseHandler):
         os.chdir(os.path.dirname(__file__))
         if os.path.exists(user_folder+"list.json"): os.remove(user_folder+"list.json")
         with open(user_folder+"list.json","w") as outfile:
-            json.dump([dict(name=pngfiles[i],title=titles[i]) for i in range(len(pngfiles))], outfile, indent=4)
+            json.dump([dict(name=pngfiles[i],title=titles[i], size=Ntiles) for i in range(len(pngfiles))], outfile, indent=4)
 
         self.set_status(200)
-        #self.redirect(self.get_argument("next", u"/results/"))
-        #self.render("results.html")
         self.flush()
         self.finish()
