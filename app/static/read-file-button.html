@@ -60,6 +60,7 @@ paper-input {
       position: fixed;
       max-width: 600px;
       top: 16px;
+      padding: 10px;
     }
   </style>
 
@@ -68,7 +69,7 @@ paper-input {
 
     <div class="horizontal layout around-justified" >
     <input-file id="input_file_id"></input-file>
-    <paper-button raised class="blue" id="entervalues" on-click="inputentries"> Enter values</paper-button>
+    <paper-button raised  class="blue" id="entervalues" on-click="inputentries"> <span>[[enter_values]]</span></paper-button>
     </div>
     <br>
    <hr> 
@@ -76,7 +77,7 @@ paper-input {
     <paper-input id="xsizeid" name="xsize" label="xsize (arcmin)" auto-validate pattern="[0-9]*" error-message="numbers only!"></paper-input>
     <paper-input id="ysizeid" name="ysize" label="ysize (arcmin)" auto-validate pattern="[0-9]*" error-message="numbers only!"></paper-input><br>
     
-    <paper-checkbox id="dothis">label</paper-checkbox> 
+    <paper-checkbox id="dothis">Use manually entered values</paper-checkbox> 
    <hr> 
     <paper-button id="upbutton" raised on-click="submit" disabled>
        <i class="fa fa-arrow-circle-right"></i> Run!
@@ -96,8 +97,8 @@ paper-input {
       <div class="horizontal layout center-justified" >
       <paper-dialog id="inputValues" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
       <h2>Enter values below  (TBD)</h2>
-
-       <iron-autogrow-textarea max-rows="10" rows=8 ></iron-autogrow-textarea>
+        <h3>Format: Ra,Dec </h3>
+       <iron-autogrow-textarea id="enteredText" max-rows="10" rows=8 ></iron-autogrow-textarea>
 
         <div class="buttons">
         <paper-button dialog-dismiss autofocus raised>Close</paper-button>
@@ -117,17 +118,32 @@ paper-input {
       Polymer({
         is: 'read-file-button',
         properties: {
+         enter_values:{
+          type: String,
+          value: "Enter values",
+         } 
         },
 
         inputentries: function(){
           var dialog = document.getElementById("inputValues");
+          var placeholder = "ra1,dec1 \nra2,dec2\n...,..."
+          $("#enteredText").attr('placeholder', placeholder);
           dialog.open();
         },
 
         submit2 : function(event){
-          //$('#upbutton')[0].disabled=false;
           doentries = true;
           var dialog = document.getElementById("inputValues");
+          var checkbox = document.getElementById("dothis");
+          if (document.getElementById("enteredText").value=="" || document.getElementById("enteredText").value===undefined) {
+            console.log('empty');
+          }
+          else {
+            this.enter_values = "Values entered";
+            $('#upbutton')[0].disabled=false;
+            $('#seeresults')[0].disabled=true;
+            checkbox.checked = true;
+          }
           dialog.close();
         },
 
@@ -168,10 +184,13 @@ paper-input {
           formdata.append('xsize', document.getElementById("xsizeid").value);
           formdata.append('ysize', document.getElementById("ysizeid").value);
           if (document.getElementById("dothis").checked) {
-            formdata.append('check', 'label');
+            formdata.append('check', 'manual');
+            formdata.append('values',document.getElementById("enteredText").value);
+            formdata.append('csvfile', "");
               }
             else {
-            formdata.append('check', 'nolabel');
+            formdata.append('check', 'file');
+            formdata.append('values',"");
           }
 
              $.ajax({

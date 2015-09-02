@@ -59,11 +59,13 @@
       $('#upbutton')[0].disabled=false;
       $('#uploadicon')[0].style.display='none';
       $('#seeresults')[0].disabled=true;
+      $('#dothis')[0].checked=false;
 
     },
     clear: function(){
       this.file_name = "Upload File";
       $('#uploadicon')[0].style.display='inline-block';
+      $('#dothis')[0].checked=false;
       this.$.file.value = "";
     },
   });

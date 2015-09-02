@@ -20,29 +20,38 @@ class BaseHandler(tornado.web.RequestHandler):
 class FileHandler(BaseHandler):
     @tornado.web.authenticated
     def post(self):
+        user_folder=os.path.join(Settings.UPLOADS,self.current_user.replace('\"','')) + '/'
+        os.system('rm -f '+user_folder+'*.*')
+        os.system('rm -rf '+user_folder+'results/')
+        check = self.get_argument("check")
+        print '+-+-+-+-',check
         id1 = self.get_argument("id")
         print '+-+-+-+-',id1
         xs = self.get_argument("xsize")
         print '+-+-+-+-',xs
         ys = self.get_argument("ysize")
         print '+-+-+-+-',ys
-        check = self.get_argument("check")
-        print '+-+-+-+-',check
         print self.current_user
-        fileinfo = self.request.files["csvfile"][0]
-        print fileinfo['filename']
-        fname = fileinfo['filename']
-        print fileinfo['content_type']
-        extn = os.path.splitext(fname)[1]
-        cname = str(uuid.uuid4()) + extn
-        user_folder=os.path.join(Settings.UPLOADS,self.current_user.replace('\"','')) + '/'
+        if check == "file":
+            fileinfo = self.request.files["csvfile"][0]
+            print fileinfo['filename']
+            fname = fileinfo['filename']
+            print fileinfo['content_type']
+            extn = os.path.splitext(fname)[1]
+            cname = str(uuid.uuid4()) + extn
+            fh = open( user_folder + cname, 'w')
+            fh.write(fileinfo['body'])
+            fh.close()
+        if check == "manual":
+            values = self.get_argument("values")
+            cname = str(uuid.uuid4()) + '.csv'
+            fh = open( user_folder + cname, 'w')
+            fh.write("RA,DEC\n")
+            fh.write(values)
+            fh.close()
+            print values
         
-        os.system('rm -f '+user_folder+'*.*')
-        os.system('rm -rf '+user_folder+'results/')
         
-        fh = open( user_folder + cname, 'w')
-        fh.write(fileinfo['body'])
-        fh.close()
         #RUN DESTHUMBS
         comm = "makeDESthumbs  %s --user demo_user --password user_demo --MP --outdir=%s" % (user_folder + cname, user_folder+'results/')
         if xs != "": comm += ' --xsize %s ' % xs
