@@ -1,6 +1,7 @@
 <link rel="import" href="/static/bower_components/polymer/polymer.html">
 <link rel="import" href="/static/bower_components/paper-button/paper-button.html">
 <link rel="import" href="/static/bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="/static/bower_components/paper-spinner/paper-spinner.html">
 <link rel="import" href="/static/bower_components/paper-icon-button/paper-icon-button.html"><link rel="stylesheet" href="/static/font-awesome/font-awesome-4.4.0/css/font-awesome.min.css">
      <link rel="import" href="/static/bower_components/iron-flex-layout/classes/iron-flex-layout.html">
      <link rel="import" href="/static/bower_components/iron-flex-layout/iron-flex-layout.html">
@@ -62,6 +63,7 @@ paper-input {
       top: 16px;
       padding: 10px;
     }
+    paper-spinner.big{width:50px;height:50px;}
   </style>
 
   <template>
@@ -96,7 +98,7 @@ paper-input {
 
       <div class="horizontal layout center-justified" >
       <paper-dialog id="inputValues" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
-      <h2>Enter values below  (TBD)</h2>
+      <h2>Enter values below </h2>
         <h3>Format: Ra,Dec </h3>
        <iron-autogrow-textarea id="enteredText" max-rows="10" rows=8 ></iron-autogrow-textarea>
 
