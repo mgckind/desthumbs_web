@@ -26,13 +26,25 @@
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
      <!--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>-->
 
-
+        <style>
+        .footer {
+  position: fixed;
+  left: 0px;
+  bottom: 10px;
+  margin-top: 0px; /* negative value of footer height */
+  height: 10px;
+  clear:both;
+  padding-top:20px;
+  font-size: 12px;
+}
+        </style>
 
   {% block extra_head_content %}{% end  %}
   </head>
   <body>
         {% block content %}{% end  %}
-    <!--<footer class="footer"> &copy; Matias Carrasco Kind -- NCSA</footer>-->
+
+    <footer class="footer"> &copy; Matias Carrasco Kind -- NCSA</footer>
   </body>
 </html>
 

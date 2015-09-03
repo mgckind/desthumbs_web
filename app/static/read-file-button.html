@@ -50,11 +50,11 @@ paper-input {
 }
 
       paper-button.blue {
-      color: var(--paper-light-blue-500);
-      --paper-button-flat-focus-color: var(--paper-light-blue-50);
+      color: var(--paper-blue-500);
+      --paper-button-flat-focus-color: var(--paper-blue-50);
     }
     paper-button.blue:hover {
-      background: var(--paper-light-blue-50);
+      background: var(--paper-blue-50);
     }
 
         paper-dialog {
@@ -71,18 +71,20 @@ paper-input {
 
     <div class="horizontal layout around-justified" >
     <input-file id="input_file_id"></input-file>
-    <paper-button raised  class="blue" id="entervalues" on-click="inputentries"> <span>[[enter_values]]</span></paper-button>
+    <paper-button raised  class="blue" id="entervalues" on-click="inputentries">
+    <i class="fa fa-keyboard-o"></i> <span>[[enter_values]]</span></paper-button>
     </div>
     <br>
+    <paper-checkbox id="dothis">Use manually entered values</paper-checkbox> 
    <hr> 
     <b> Extra options </b>
     <paper-input id="xsizeid" name="xsize" label="xsize (arcmin)" auto-validate pattern="[0-9]*" error-message="numbers only!"></paper-input>
     <paper-input id="ysizeid" name="ysize" label="ysize (arcmin)" auto-validate pattern="[0-9]*" error-message="numbers only!"></paper-input><br>
     
-    <paper-checkbox id="dothis">Use manually entered values</paper-checkbox> 
+    <paper-checkbox id="onlyFiles">Just return list of files</paper-checkbox> 
    <hr> 
     <paper-button id="upbutton" raised on-click="submit" disabled>
-       <i class="fa fa-arrow-circle-right"></i> Run!
+       <i class="fa fa-cogs"></i> Run!
     </paper-button>
     <paper-spinner id="spinner_up" class="big"></paper-spinner>
     <br>
@@ -90,7 +92,7 @@ paper-input {
     <br> 
     <br> 
     <div class="horizontal layout center-justified" >
-    <paper-button id="seeresults" on-click="results" >
+    <paper-button raised id="seeresults" on-click="results" >
     <i class="fa fa-eye"></i>
       See Results
     </paper-button>
@@ -183,8 +185,14 @@ paper-input {
           var formdata = new FormData();
           formdata.append('csvfile', this.$.input_file_id.file);
           formdata.append('id', 'testId');
+          var listF = "no";
           formdata.append('xsize', document.getElementById("xsizeid").value);
           formdata.append('ysize', document.getElementById("ysizeid").value);
+          if (document.getElementById("onlyFiles").checked){
+            listF = "yes";
+          }
+          formdata.append('listonly', listF);
+
           if (document.getElementById("dothis").checked) {
             formdata.append('check', 'manual');
             formdata.append('values',document.getElementById("enteredText").value);
