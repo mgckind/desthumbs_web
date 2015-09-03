@@ -22,7 +22,7 @@ class FileHandler(BaseHandler):
     def post(self):
         user_folder=os.path.join(Settings.UPLOADS,self.current_user.replace('\"','')) + '/'
         os.system('rm -f '+user_folder+'*.*')
-        #os.system('rm -rf '+user_folder+'results/')
+        os.system('rm -rf '+user_folder+'results/')
         check = self.get_argument("check")
         print '+-+-+-+-',check
         id1 = self.get_argument("id")
