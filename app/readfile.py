@@ -56,6 +56,8 @@ class FileHandler(BaseHandler):
         
         
         #RUN DESTHUMBS
+        passw = self.get_secure_cookie("pass")
+        print passw,'!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
         comm = "makeDESthumbs  %s --user demo_user --password user_demo --MP --outdir=%s" % (user_folder + cname, user_folder+'results/')
         if xs != "": comm += ' --xsize %s ' % xs
         if ys != "": comm += ' --ysize %s ' % ys

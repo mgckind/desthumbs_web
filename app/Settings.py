@@ -23,3 +23,5 @@ class dbConfig(object):
         self.host = 'leovip148.ncsa.uiuc.edu'
         self.port = '1521'
 
+class mysession(object):
+    randomname = 'abcde'
