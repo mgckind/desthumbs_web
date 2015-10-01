@@ -8,7 +8,6 @@ import tornado.web
 import Settings
 from tornado.options import define, options
 import login
-import test
 import readfile
 import results
 import download
@@ -23,7 +22,6 @@ class Application(tornado.web.Application):
             (r"/", login.MainHandler),
             (r"/auth/login/", login.AuthLoginHandler),
             (r"/auth/logout/", login.AuthLogoutHandler),
-            (r"/test/", test.TestHandler),
             (r"/list/", login.MainHandler),
             (r"/readfile/", readfile.FileHandler),
             (r"/results/", results.DisplayHandler),
