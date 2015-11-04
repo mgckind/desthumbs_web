@@ -10,6 +10,8 @@ import Settings
 import time
 import glob
 import json
+import dtasks
+import datetime
 
 
 
@@ -19,6 +21,7 @@ class BaseHandler(tornado.web.RequestHandler):
 
 class FileHandler(BaseHandler):
     @tornado.web.authenticated
+    @tornado.web.asynchronous
     def post(self):
         user_folder=os.path.join(Settings.UPLOADS,self.current_user.replace('\"','')) + '/'
         os.system('rm -f '+user_folder+'*.*')
@@ -35,6 +38,9 @@ class FileHandler(BaseHandler):
         print '+-+-+-+-',listonly
         print 
         print self.current_user
+
+        sendemail = self.get_argument("sendemail")
+        toemail = self.get_argument("toemail")
         if check == "file":
             fileinfo = self.request.files["csvfile"][0]
             print fileinfo['filename']
@@ -58,11 +64,21 @@ class FileHandler(BaseHandler):
         #RUN DESTHUMBS
         loc_passw = self.get_secure_cookie("pass").replace('\"','')
         loc_user = self.get_secure_cookie("user").replace('\"','')
-        comm = "makeDESthumbs  %s --user %s --password %s --MP --outdir=%s" % (user_folder + cname, loc_user, loc_passw, user_folder+'results/')
-        if xs != "": comm += ' --xsize %s ' % xs
-        if ys != "": comm += ' --ysize %s ' % ys
-        print comm
-        os.system(comm)
+        #comm = "makeDESthumbs  %s --user %s --password %s --MP --outdir=%s" % (user_folder + cname, loc_user, loc_passw, user_folder+'results/')
+        #if xs != "": comm += ' --xsize %s ' % xs
+        #if ys != "": comm += ' --ysize %s ' % ys
+        #print comm
+        #os.system(comm)
+        notify  = True
+        now = datetime.datetime.now()
+        tiid = loc_user+'__'+cname[:-4]+'_{'+now.ctime()+'}'
+        if sendemail == 'yes':
+            print 'Sending email to %s' % toemail
+            run=dtasks.desthumb.apply_async(args=[user_folder + cname, loc_user, loc_passw, user_folder+'results/', xs,ys, notify], task_id=tiid, link=dtasks.send_note.si(loc_user, tiid, toemail))
+        else:
+            print 'Not sending email'
+            run=dtasks.desthumb.apply_async(args=[user_folder + cname, loc_user, loc_passw, user_folder+'results/', xs,ys, notify], task_id=tiid)
+
         mypath = '/static/uploads/'+self.current_user.replace('\"','')+'/results/'
 
         allfiles = glob.glob(user_folder+'results/*.*')

@@ -25,7 +25,10 @@ class Application(tornado.web.Application):
             (r"/list/", login.MainHandler),
             (r"/readfile/", readfile.FileHandler),
             (r"/results/", results.DisplayHandler),
+            (r"/status/([^/]+)", results.StatusHandler),
+            (r"/mystatus/", results.StatusUserHandler),
             (r"/single/", download.DownloadHandler),
+            (r"/cancel/", results.CancelHandler),
             (r"/deslabs", tornado.web.RedirectHandler,
         dict(url="http://deslabs.ncsa.illinois.edu/")),
         ]

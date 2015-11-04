@@ -1,6 +1,7 @@
 <link rel="import" href="/static/bower_components/polymer/polymer.html">
 <link rel="import" href="/static/bower_components/paper-button/paper-button.html">
 <link rel="import" href="/static/bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="/static/bower_components/paper-toast/paper-toast.html">
 <link rel="import" href="/static/bower_components/paper-spinner/paper-spinner.html">
 <link rel="import" href="/static/bower_components/paper-icon-button/paper-icon-button.html"><link rel="stylesheet" href="/static/font-awesome/font-awesome-4.4.0/css/font-awesome.min.css">
      <link rel="import" href="/static/bower_components/iron-flex-layout/classes/iron-flex-layout.html">
@@ -64,6 +65,22 @@ paper-input {
       padding: 10px;
     }
     paper-spinner.big{width:50px;height:50px;}
+
+   paper-dialog.size-position {
+      position: fixed;
+      top: 50%;
+      right: 45%  ;
+      width: 200px;
+      height: 50px;
+      overflow: auto;
+    }
+
+     paper-toast.toast-position {
+      position: fixed;
+      left : 45%;
+    }  
+
+
   </style>
 
   <template>
@@ -83,18 +100,28 @@ paper-input {
     
     <paper-checkbox id="onlyFiles">Just return list of files</paper-checkbox> 
    <hr> 
-    <paper-button id="upbutton" raised on-click="submit" disabled>
-       <i class="fa fa-cogs"></i> Run!
+   
+   <div class=" horizontal center layout justified" >
+   <paper-checkbox style="font-size:14px;" id="sendemail" on-change="emailcheck">Send email after job completion </paper-checkbox>
+       <paper-input  id="validemail" name="email" label="Email">
+    </paper-input>
+
+    
+    </div>
+       <paper-button id="upbutton" raised on-click="submit" disabled>
+       <i class="fa fa-cogs"></i> Submit  !
     </paper-button>
+
+
     <paper-spinner id="spinner_up" class="big"></paper-spinner>
+     
     <br>
-    <br> 
-    <br> 
+
     <br> 
     <div class="horizontal layout center-justified" >
-    <paper-button raised id="seeresults" on-click="results" >
+    <paper-button raised id="jobstatus" onclick="window.open('/mystatus/','_self',false);" >
     <i class="fa fa-eye"></i>
-      See Results
+      My jobs
     </paper-button>
     </div>
 
@@ -109,9 +136,14 @@ paper-input {
         <paper-button on-click="submit2" raised> Accept</paper-button>
       </div>
     </paper-dialog>
+    <paper-toast class="toast-position" id="toast1" text="Job has been submitted!" duration="5000"> </paper-toast>
     </div>
 
+ <paper-dialog class="size-position" id="emaildialog" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
+      Please enter a valid email
+    </paper-dialog>
 
+    
 
   </template>
 
@@ -126,6 +158,14 @@ paper-input {
           type: String,
           value: "Enter values",
          } 
+        },
+
+        emailcheck: function(){
+          var emailbox = document.getElementById("sendemail");
+          var edialog = document.getElementById("emaildialog");
+          if (emailbox.checked == true){
+            edialog.open();
+          }
         },
 
         inputentries: function(){
@@ -145,7 +185,7 @@ paper-input {
           else {
             this.enter_values = "Values entered";
             $('#upbutton')[0].disabled=false;
-            $('#seeresults')[0].disabled=true;
+            //$('#seeresults')[0].disabled=true;
             checkbox.checked = true;
           }
           dialog.close();
@@ -174,7 +214,7 @@ paper-input {
           $('#inputfilebutton')[0].disabled=false;
           $('#input_file_id')[0].clear();
           $('#spinner_up')[0].active = false;
-          $('#seeresults')[0].disabled = false;
+          //$('#seeresults')[0].disabled = false;
           window.location.href="/results/";
         },
         results: function(event){
@@ -183,16 +223,24 @@ paper-input {
         submit : function(event){
           
           var formdata = new FormData();
+          document.querySelector('#toast1').show();
           formdata.append('csvfile', this.$.input_file_id.file);
           formdata.append('id', 'testId');
           var listF = "no";
+          var SendEmail = "no";
+          var toemail = "";
           formdata.append('xsize', document.getElementById("xsizeid").value);
           formdata.append('ysize', document.getElementById("ysizeid").value);
           if (document.getElementById("onlyFiles").checked){
             listF = "yes";
           }
           formdata.append('listonly', listF);
-
+          if (document.getElementById("sendemail").checked){
+            SendEmail = "yes";
+            toemail = document.getElementById("validemail").value
+          }
+          formdata.append('sendemail', SendEmail);
+          formdata.append('toemail', toemail);
           if (document.getElementById("dothis").checked) {
             formdata.append('check', 'manual');
             formdata.append('values',document.getElementById("enteredText").value);

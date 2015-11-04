@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block extra_head_content  %}
+<link rel="import" href="/static/bower_components/polymer/polymer.html">
+<link rel="import" href="/static/bower_components/iron-list/iron-list.html">
+<link rel="import" href="/static/bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="/static/bower_components/paper-scroll-header-panel/paper-scroll-header-panel.html">
+<link rel="import" href="/static/des-toolbar.html">
+<link rel="import" href="/static/des-job.html">
+  <link rel="import" href="/static/bower_components/iron-flex-layout/classes/iron-flex-layout.html">
+     <link rel="import" href="/static/bower_components/iron-flex-layout/iron-flex-layout.html">
+
+<style is="custom-style">
+
+      body {
+      font-family: 'Roboto', 'Noto', sans-serif;
+      font-size: 18px;
+      margin: 0;
+      background-color: var(--paper-blue-50);
+    }
+
+</style>
+{% end %}
+
+
+{% block content %}
+      <des-toolbar iconname="menu" ></des-toolbar>
+
+      <div class="horizontal center-justified layout">
+      <div class="vertical center-justified layout" style = "padding:10px;">
+      <template id="Jobs" is="dom-bind"> 
+      <template  is="dom-repeat" items="[[objs]]">
+      <des-job job="[[item.job]]" status="[[item.status]]" elapsed="[[item.elapsed]]" submitted="[[item.time]]"></des-job>
+
+      </template>
+      </template>      
+      </div>
+      </div>
+    
+
+<script type="text/javascript">
+
+   var xmlhttp = new XMLHttpRequest();
+   var url2 = "/static/uploads/{{username}}/jobs.json";
+   xmlhttp.onreadystatechange=function(){
+    if (xmlhttp.readyState ==4 && xmlhttp.status == 200){
+      Jobs.objs = JSON.parse(xmlhttp.responseText);
+      var count = Object.keys(Jobs.objs).length;
+      console.log(count);
+    }
+   }
+   xmlhttp.open("GET", url2, true);
+   xmlhttp.send();
+  
+</script>
+
+{% end %}
+
+
+
