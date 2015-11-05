@@ -19,15 +19,17 @@ class DownloadHandler(BaseHandler):
     @tornado.web.authenticated
     def post(self):
         title = self.get_argument("title")
+        siid = self.get_argument("siid")
         print '+-+-+-+-',title
+        print '+-+-+-+-',siid
         user_folder=os.path.join(Settings.UPLOADS,self.current_user.replace('\"','')) + '/'
 
-        filegz=user_folder+'results/%s.tar.gz' % title
+        filegz=user_folder+'results/'+siid+'/%s.tar.gz' % title
         if os.path.exists(filegz):
             self.set_status(200)
             self.flush()
         else:
-            os.chdir(user_folder+'results/')
+            os.chdir(user_folder+'results/'+siid+'/')
             os.system("tar -zcf %s %s*" % (filegz, title)) 
             os.chdir(os.path.dirname(__file__))
         

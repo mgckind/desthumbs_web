@@ -36,7 +36,7 @@
       <paper-button raised class="red" onclick="getlist()" id="getlistId">  <i class="fa fa-arrow-down"></i> Download file list</paper-button> <br>
       <template id="Demo" is="dom-bind"> 
       <template  is="dom-repeat" items="[[objs]]">
-      <des-thumb imdisplay="[[item.name]]" imtitle="[[item.title]]"></des-thumb>
+      <des-thumb imdisplay="[[item.name]]" imtitle="[[item.title]]" jobid="{{jobid}}"></des-thumb>
 
       </template>
       </template>
@@ -47,7 +47,11 @@
 
    var xmlhttp = new XMLHttpRequest();
    var url = "/static/uploads/test.json";
-   var url2 = "/static/uploads/{{username}}/list.json";
+   var tiid = "{{jobid}}";
+   var n1=tiid.search("__");
+   var n2=tiid.search("{");
+   var siid = tiid.substring(n1+2,n2-1); 
+   var url2 = "/static/uploads/{{username}}/results/"+siid+"/list.json";
    xmlhttp.onreadystatechange=function(){
     if (xmlhttp.readyState ==4 && xmlhttp.status == 200){
       Demo.objs = JSON.parse(xmlhttp.responseText);
@@ -64,7 +68,7 @@
    function getall(){
       console.log('download all');
       var link = document.createElement('a');
-        link.href = "/static/uploads/{{username}}/results/all.tar.gz";
+        link.href = "/static/uploads/{{username}}/results/"+siid+"/all.tar.gz";
         if (link.download !== undefined){
             //Set HTML5 download attribute. This will prevent file from opening if supported.
             var fileName = link.href.substring(link.href.lastIndexOf('/') + 1, link.href.length);
@@ -83,7 +87,7 @@
    }
       function getlist(){
       var link = document.createElement('a');
-        link.href = "/static/uploads/{{username}}/results/list_all.txt";
+        link.href = "/static/uploads/{{username}}/results/"+siid+"/list_all.txt";
         if (link.download !== undefined){
             //Set HTML5 download attribute. This will prevent file from opening if supported.
             var fileName = link.href.substring(link.href.lastIndexOf('/') + 1, link.href.length);

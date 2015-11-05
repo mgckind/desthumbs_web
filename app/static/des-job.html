@@ -25,7 +25,7 @@
     }
 
     paper-card {
-      width: 700px;
+      width: 730px;
       max-height: 40px;
       margin-bottom: 10px;
     }
@@ -60,12 +60,16 @@
 <span style="color:blue; font-size: 13px;">{{_returnTime(elapsed)}}</span>
 </div>
 </div>
-<div style="position:absolute; right:155px; bottom:10px">
+<div style="position:absolute; right:185px; bottom:10px">
 <span class="jobstatus">{{_returnStatus(status)}}</span>
 </div>
 
-<div style="position:absolute; right:75px; bottom:0px"> 
+<div style="position:absolute; right:110px; bottom:0px"> 
 <paper-icon-button  id="view" icon="launch" class="mycolors" on-click="viewjob" disabled$="{{_viewjob(status)}}">
+  </paper-icon-button>
+</div>
+<div style="position:absolute; right:75px; bottom:0px"> 
+<paper-icon-button  id="viewlog" icon="assignment" class="mycolors" on-click="viewlog" disabled$="{{_viewlog(status)}}">
   </paper-icon-button>
 </div>
 <div style="position:absolute; right:40px; bottom:0px"> 
@@ -76,6 +80,7 @@
 </div>
 </paper-card>
 <paper-tooltip for="cancel" position="top" offset="0"> cancel job </paper-tooltip>
+<paper-tooltip for="viewlog" position="top" offset="0"> view log </paper-tooltip>
 <paper-tooltip for="view" position="top" offset="0"> view results </paper-tooltip>
 <paper-tooltip for="delete" position="top" offset="0"> delete </paper-tooltip>
 </template>
@@ -135,6 +140,10 @@
       }, 
 
       viewjob: function(event){
+        url='/results/'+this.job;
+        window.open(url,'_self',false);
+      },
+      viewlog: function(event){
         url='/status/'+this.job;
         window.open(url,'_self',false);
       },
@@ -152,6 +161,14 @@
         }
         else{
           return true;
+        }
+      },
+      _viewlog: function(status){
+        if (status === "REVOKED") {
+          return true;
+        }
+        else{
+          return false;
         }
       },
       completeHandler: function(){

@@ -40,8 +40,13 @@ class BaseHandler(tornado.web.RequestHandler):
 
 class DisplayHandler(BaseHandler):
     @tornado.web.authenticated
-    def get(self):
-        self.render("results.html", username=self.current_user.replace('\"',''))
+    def get(self, slug):
+        print slug
+        res = AsyncResult(slug)
+        if res.ready():
+            self.render("results.html", username=self.current_user.replace('\"',''), jobid=slug)
+        else:
+            self.render("results.html", username=self.current_user.replace('\"',''), jobid='00')
 
 class DisplayOneHandler(BaseHandler):
     @tornado.web.authenticated

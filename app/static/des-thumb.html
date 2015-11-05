@@ -123,8 +123,11 @@
         imtitle:{
           type: String,
         },
-
+        jobid : {
+         type: String,
+         
       },
+       }, 
 
       _returnName: function(imtitle) {
         return imtitle;
@@ -195,6 +198,10 @@
         },
 
       download: function(event){
+        var n1=this.jobid.search("__");
+        var n2=this.jobid.search("{");
+        var siid = this.jobid.substring(n1+2,n2-1);
+        console.log(siid);
         event.stopPropagation();
         var dialog = document.getElementById(this.imtitle);
         var wrap = document.getElementById(this.imtitle+"_wrap");
@@ -208,6 +215,7 @@
         singlepath = this.imdisplay;
         singletitle = this.imtitle;
         data.append('title', this.imtitle);
+        data.append('siid', siid);
         $.ajax({
              url: '/single/',  //Server script to process data
              type: 'POST',
