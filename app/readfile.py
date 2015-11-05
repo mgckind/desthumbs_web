@@ -24,8 +24,8 @@ class FileHandler(BaseHandler):
     @tornado.web.asynchronous
     def post(self):
         user_folder=os.path.join(Settings.UPLOADS,self.current_user.replace('\"','')) + '/'
-        os.system('rm -f '+user_folder+'*.*')
-        os.system('rm -rf '+user_folder+'results/')
+        #os.system('rm -f '+user_folder+'*.*')
+        #os.system('rm -rf '+user_folder+'results/')
         check = self.get_argument("check")
         print '+-+-+-+-',check
         id1 = self.get_argument("id")
@@ -69,49 +69,16 @@ class FileHandler(BaseHandler):
         #if ys != "": comm += ' --ysize %s ' % ys
         #print comm
         #os.system(comm)
-        notify  = True
         now = datetime.datetime.now()
+        siid = cname[:-4]
         tiid = loc_user+'__'+cname[:-4]+'_{'+now.ctime()+'}'
         if sendemail == 'yes':
             print 'Sending email to %s' % toemail
-            run=dtasks.desthumb.apply_async(args=[user_folder + cname, loc_user, loc_passw, user_folder+'results/', xs,ys, notify], task_id=tiid, link=dtasks.send_note.si(loc_user, tiid, toemail))
+            run=dtasks.desthumb.apply_async(args=[user_folder + cname, loc_user, loc_passw, user_folder+'results/'+siid+'/', xs,ys, siid, tiid, user_folder, listonly], task_id=tiid, link=dtasks.send_note.si(loc_user, tiid, toemail))
         else:
             print 'Not sending email'
-            run=dtasks.desthumb.apply_async(args=[user_folder + cname, loc_user, loc_passw, user_folder+'results/', xs,ys, notify], task_id=tiid)
+            run=dtasks.desthumb.apply_async(args=[user_folder + cname, loc_user, loc_passw, user_folder+'results/'+siid+'/', xs,ys, siid ,tiid,user_folder, listonly], task_id=tiid)
 
-        mypath = '/static/uploads/'+self.current_user.replace('\"','')+'/results/'
-
-        allfiles = glob.glob(user_folder+'results/*.*')
-        Fall = open(user_folder+'results/list_all.txt','w')
-        prefix='http://desdev2.cosmology.illinois.edu:8888/static'
-        for ff in allfiles: Fall.write(prefix+ff.split('static')[-1]+'\n')
-        Fall.close()
-
-        if listonly == 'yes':
-            if os.path.exists(user_folder+"list.json"): os.remove(user_folder+"list.json")
-            with open(user_folder+"list.json","w") as outfile:
-                json.dump('', outfile, indent=4)
-            self.set_status(200)
-            self.flush()
-        else:
-
-            tiffiles=glob.glob(user_folder+'results/*.tif')
-            titles=[]
-            pngfiles=[]
-            Ntiles = len(tiffiles)
-            for f in tiffiles:
-                title=f.split('/')[-1][:-4]
-                os.system("convert %s %s.png" % (f,f))
-                titles.append(title)
-                pngfiles.append(mypath+title+'.tif.png')
-       
-            os.chdir(user_folder)
-            os.system("tar -zcf results/all.tar.gz results/") 
-            os.chdir(os.path.dirname(__file__))
-            if os.path.exists(user_folder+"list.json"): os.remove(user_folder+"list.json")
-            with open(user_folder+"list.json","w") as outfile:
-                json.dump([dict(name=pngfiles[i],title=titles[i], size=Ntiles) for i in range(len(pngfiles))], outfile, indent=4)
-
-            self.set_status(200)
-            self.flush()
+        self.set_status(200)
+        self.flush()
         self.finish()

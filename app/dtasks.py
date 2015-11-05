@@ -6,6 +6,9 @@ import time
 import tornado.web
 import smtplib
 import urllib
+import glob
+import os
+import json
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.header import Header
@@ -19,15 +22,48 @@ class BaseHandler(tornado.web.RequestHandler):
 celery = Celery('dtasks', backend='redis://127.0.0.1:6379/0', broker='redis://127.0.0.1:6379/0')
 
 @celery.task
-def desthumb(inputs, user, passwd, outputs,xs,ys, notify):
+def desthumb(inputs, user, passwd, outputs,xs,ys, siid, tiid, user_folder, listonly):
     com =  "makeDESthumbs  %s --user %s --password %s --MP --outdir=%s" % (inputs, user, passwd, outputs)
     if xs != "": com += ' --xsize %s ' % xs
     if ys != "": com += ' --ysize %s ' % ys
-    com2 = '/Users/Matias/Dropbox/DESDM/test_polymer/app/task2 30'
+    com2 = '/root/DES/desth/app/task2 30'
     #A=BaseHandler()
     #print(A.current_user)
-    oo = subprocess.check_output([com2],shell=True)
-    #print('Done!')
+    oo = subprocess.check_output([com],shell=True)
+    mypath = '/static/uploads/'+user+'/results/'+siid+'/'
+
+
+    if listonly == 'yes':
+        if os.path.exists(user_folder+"results/"+siid+"/list.json"): os.remove(user_folder+"results/"+siid+"/list.json")
+        with open(user_folder+"results/"+siid+"/list.json","w") as outfile:
+            json.dump('', outfile, indent=4)
+    else:
+        tiffiles=glob.glob(user_folder+'results/'+siid+'/*.tif')
+        titles=[]
+        pngfiles=[]
+        Ntiles = len(tiffiles)
+        for f in tiffiles:
+            title=f.split('/')[-1][:-4]
+            os.system("convert %s %s.png" % (f,f))
+            titles.append(title)
+            pngfiles.append(mypath+title+'.tif.png')
+       
+        os.chdir(user_folder)
+        os.system("tar -zcf results/"+siid+"/all.tar.gz results/"+siid+"/") 
+        os.chdir(os.path.dirname(__file__))
+        if os.path.exists(user_folder+"results/"+siid+"/list.json"): os.remove(user_folder+"results/"+siid+"/list.json")
+        with open(user_folder+"results/"+siid+"/list.json","w") as outfile:
+            json.dump([dict(name=pngfiles[i],title=titles[i], size=Ntiles) for i in range(len(pngfiles))], outfile, indent=4)
+
+
+    # writing files for wget
+    allfiles = glob.glob(user_folder+'results/'+siid+'/*.*')
+    Fall = open(user_folder+'results/'+siid+'/list_all.txt','w')
+    prefix='http://desdev2.cosmology.illinois.edu:8888/static'
+    for ff in allfiles:
+        if ff.find('all.tar.gz')==-1: Fall.write(prefix+ff.split('static')[-1]+'\n')
+    Fall.close()
+
     return oo
 
 @celery.task
@@ -36,7 +72,7 @@ def send_note(user, jobid, toemail):
     print 'I will notify %s to its email address :  %s' % (user, toemail)
     fromemail = 'devnull@ncsa.illinois.edu'
     s = smtplib.SMTP('smtp.ncsa.illinois.edu')
-    link = "http://localhost:8888/status/%s" % jobid
+    link = "http://desdev2.cosmology.illinois.edu:8888/status/%s" % jobid
     link2 = urllib.quote(link.encode('utf8'),safe="%/:=&?~#+!$,;'@()*[]")
     jobid2=jobid[jobid.find('__')+2:jobid.find('{')-1]
 

@@ -24,7 +24,7 @@ class Application(tornado.web.Application):
             (r"/auth/logout/", login.AuthLogoutHandler),
             (r"/list/", login.MainHandler),
             (r"/readfile/", readfile.FileHandler),
-            (r"/results/", results.DisplayHandler),
+            (r"/results/([^/]+)", results.DisplayHandler),
             (r"/status/([^/]+)", results.StatusHandler),
             (r"/mystatus/", results.StatusUserHandler),
             (r"/single/", download.DownloadHandler),
