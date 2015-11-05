@@ -69,11 +69,11 @@ class StatusHandler(BaseHandler):
     def get(self, slug):
         res = AsyncResult(slug)
         if res.ready():
-            self.write('Completed <br>')
-            self.write('LOG <br>')
-            self.write(res.result.replace('\n', '<br>'))
+            self.render("log.html", joblog=res.result.replace('\n','<br>'))
+            #self.write(res.result.replace('\n', '<br>'))
         else:
-            self.write('Running')
+            #self.write('Running')
+            self.render("log.html", joblog="Running")
 
 class StatusUserHandler(BaseHandler):
     @tornado.web.authenticated

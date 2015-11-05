@@ -1,0 +1,82 @@
+<link rel="import" href="/static/bower_components/polymer/polymer.html">
+<link rel="import" href="/static/bower_components/iron-list/iron-list.html">
+<link rel="import" href="/static/bower_components/paper-styles/color.html">
+<link rel="import" href="/static/bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="/static/bower_components/paper-scroll-header-panel/paper-scroll-header-panel.html">
+<link rel="import" href="/static/bower_components/paper-card/paper-card.html">
+<link rel="import" href="/static/bower_components/paper-tooltip/paper-tooltip.html">
+<link rel="import" href="/static/bower_components/polymer/polymer.html">
+<link rel="import" href="/static/bower_components/paper-material/paper-material.html">
+<link rel="import" href="/static/bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="/static/bower_components/paper-spinner/paper-spinner.html">
+<link rel="import" href="/static/bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
+ <link rel="import" href="/static/bower_components/neon-animation/neon-animations.html">
+     <link rel="import" href="/static/bower_components/iron-flex-layout/classes/iron-flex-layout.html">
+     <link rel="import" href="/static/bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="stylesheet" href="/static/font-awesome/font-awesome-4.4.0/css/font-awesome.min.css">
+
+
+<dom-module id="des-log">
+
+<style>
+
+  :host {
+      --color: green;
+    }
+
+    paper-card {
+      width: 730px;
+      height: 400px;
+      margin-bottom: 10px;
+    }
+
+
+    .pink {
+       
+      --paper-card-header-color: var(--paper-green-500);
+    }
+
+
+    .jobstatus {
+      color: var(--color, orange);
+    }
+
+        paper-tooltip {
+      width: 80px;
+      padding-right: 0px;
+      padding-bottom: 0px;
+      float: left;
+    }
+ 
+
+</style>
+
+<template>
+
+<paper-card>
+<div >
+<span >{{joblog}}</span>
+<div>
+
+</paper-card>
+</template>
+
+<script>
+     (function(){
+      Polymer({
+      is: "des-log",
+      properties: {
+        joblog:{
+          type: String,
+        },
+      },
+
+      _returnLog: function(joblog) {
+        return joblog;
+      }, 
+        });
+    })();
+</script>
+
+
+</dom-module>
