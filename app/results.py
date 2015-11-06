@@ -67,13 +67,16 @@ class DisplayOneBigHandler(BaseHandler):
 class StatusHandler(BaseHandler):
     @tornado.web.authenticated
     def get(self, slug):
+        loc_user = self.get_secure_cookie("user").replace('\"','')
         res = AsyncResult(slug)
+        jobid=slug[slug.find('__')+2:slug.find('{')-1]
         if res.ready():
-            self.render("log.html", joblog=res.result.replace('\n','<br>'))
+            self.render("log.html", joblog=res.result.replace('\n','</br>'), username=loc_user, jobid=jobid)
+            #self.render("log.html", joblog='hola <br> matias', username=loc_user)
             #self.write(res.result.replace('\n', '<br>'))
         else:
             #self.write('Running')
-            self.render("log.html", joblog="Running")
+            self.render("log.html", joblog="Running", username=loc_user, jobid=jobid)
 
 class StatusUserHandler(BaseHandler):
     @tornado.web.authenticated
