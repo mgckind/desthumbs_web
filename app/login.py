@@ -20,8 +20,14 @@ class BaseHandler(tornado.web.RequestHandler):
 class MainHandler(BaseHandler):
     @tornado.web.authenticated
     def get(self):
-        username = tornado.escape.xhtml_escape(self.current_user)
-        self.render("main.html", name=self.current_user.replace('\"',''), db=ddbb)
+        loc_passw = self.get_secure_cookie("pass").replace('\"','')
+        loc_user = self.get_secure_cookie("user").replace('\"','')
+        kwargs = {'host': dbConfig0.host, 'port': dbConfig0.port, 'service_name': 'desoper'}
+        dsn = cx_Oracle.makedsn(**kwargs)
+        dbh = cx_Oracle.connect(loc_user, loc_passw, dsn=dsn)
+        cursor = dbh.cursor()
+        cc=cursor.execute('select firstname, email from des_users where upper(username) = \'%s\'' % loc_user.upper()).fetchone()
+        self.render("main.html", name=self.current_user.replace('\"',''), db=ddbb, email=cc[1])
 
 class AuthLoginHandler(BaseHandler):
     global ddbb
@@ -62,8 +68,8 @@ class AuthLoginHandler(BaseHandler):
 
     def set_current_user(self, user, passwd):
         if user:
-            self.set_secure_cookie("user", tornado.escape.json_encode(user), expires_days = None)
-            self.set_secure_cookie("pass", tornado.escape.json_encode(passwd), expires_days = None)
+            self.set_secure_cookie("user", tornado.escape.json_encode(user), expires_days = 1)
+            self.set_secure_cookie("pass", tornado.escape.json_encode(passwd), expires_days = 1)
         else:
             self.clear_cookie("user")
             self.clear_cookie("pass")

@@ -72,7 +72,7 @@ def send_note(user, jobid, toemail):
     print 'I will notify %s to its email address :  %s' % (user, toemail)
     fromemail = 'devnull@ncsa.illinois.edu'
     s = smtplib.SMTP('smtp.ncsa.illinois.edu')
-    link = "http://desdev2.cosmology.illinois.edu:8888/results/%s" % jobid
+    link = "http://desdev2.cosmology.illinois.edu/results/%s" % jobid
     link2 = urllib.quote(link.encode('utf8'),safe="%/:=&?~#+!$,;'@()*[]")
     jobid2=jobid[jobid.find('__')+2:jobid.find('{')-1]
 

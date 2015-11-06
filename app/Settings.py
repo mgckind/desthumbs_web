@@ -16,7 +16,7 @@ console = logging.StreamHandler(sys.stderr)
 #import base64
 #import uuid
 #base64.b64encode(uuid.uuid4().bytes + uuid.uuid4().bytes)
-COOKIE_SECRET = 'L8LwECiNRxq2N0N2eGxx9MZlrpmuMEimlydNX/vt1LM='
+COOKIE_SECRET = 'L8LwECiN0c5539e8-90b0-4ff2-a0e2-2602062243c7ydNX/vt1LM='
 
 class dbConfig(object):
     def __init__(self):

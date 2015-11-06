@@ -16,15 +16,16 @@
       font-family: 'Roboto', 'Noto', sans-serif;
       font-size: 18px;
       margin: 0;
-      background-color: var(--paper-blue-50);
+      background-color: #F5F5F5;
     }
 
       paper-button.red {
       color: black;
-      --paper-button-flat-focus-color: var(--paper-red-50);
+      background: #C5E1A5;
+      --paper-button-flat-focus-color: #C5E1A5;
     }
     paper-button.red:hover {
-      background: var(--paper-red-50);
+      background: #8BC34A;
     }
 </style>
 {% end %}
@@ -33,7 +34,7 @@
       <des-toolbar username={{username}} iconname="arrow-back"></des-toolbar>
 
       <paper-button raised class="red" onclick="getall()" id="getallId">  <i class="fa fa-cloud-download"></i> Download all tiles</paper-button> 
-      <paper-button raised class="red" onclick="getlist()" id="getlistId">  <i class="fa fa-arrow-down"></i> Download file list</paper-button> <br>
+      <paper-button raised class="red" onclick="getlist()" id="getlistId">  <i class="fa fa-arrow-down"></i> Download file list</paper-button> Note: To download all the files you can use wget ($wget -i list_all.txt)<br>
       <template id="Demo" is="dom-bind"> 
       <template  is="dom-repeat" items="[[objs]]">
       <des-thumb imdisplay="[[item.name]]" imtitle="[[item.title]]" jobid="{{jobid}}"></des-thumb>
