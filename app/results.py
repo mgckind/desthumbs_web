@@ -14,7 +14,7 @@ import Settings
 import datetime
 import time
 import numpy
-
+import shutil
 
 def humantime(s):
     if s < 60:
@@ -150,4 +150,24 @@ class CancelHandler(BaseHandler):
         self.flush()
         self.finish()
 
-       
+class DeleteHandler(BaseHandler):
+    @tornado.web.authenticated
+    def post(self):
+        jobid = self.get_argument("jobname")
+        jobid2=jobid[jobid.find('__')+2:jobid.find('{')-1]
+        user_folder=os.path.join(Settings.UPLOADS,self.current_user.replace('\"','')) + '/'
+         
+        os.chdir(user_folder+'results/')
+        try:
+            shutil.rmtree(jobid2+'/')
+        except:
+            pass 
+        os.chdir(user_folder)
+        os.remove(jobid2+'.csv')
+        r=redis.StrictRedis(host='127.0.0.1', port=6379, db=0)
+        r.delete('celery-task-meta-'+jobid)        
+        self.set_status(200)
+        self.flush()
+        self.finish()
+
+      

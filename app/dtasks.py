@@ -61,7 +61,7 @@ def desthumb(inputs, user, passwd, outputs,xs,ys, siid, tiid, user_folder, listo
     Fall = open(user_folder+'results/'+siid+'/list_all.txt','w')
     prefix='http://desdev2.cosmology.illinois.edu:8888/static'
     for ff in allfiles:
-        if ff.find('all.tar.gz')==-1: Fall.write(prefix+ff.split('static')[-1]+'\n')
+        if (ff.find('all.tar.gz')==-1 & ff.find('list.json')==-1): Fall.write(prefix+ff.split('static')[-1]+'\n')
     Fall.close()
 
     return oo

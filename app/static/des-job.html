@@ -76,7 +76,7 @@
 <paper-icon-button  id="cancel" icon="cancel" class="mycolors" on-click="cancel" disabled$="{{_canceljob(status)}}">
 </div>
 <div style="position:absolute; right:5px; bottom:0px"> 
-<paper-icon-button  id="delete" icon="delete" class="mycolors" on-click="delete" disabled>
+<paper-icon-button  id="delete" icon="delete" class="mycolors" on-click="deletej" disabled$="{{_deletejob(status)}}">
 </div>
 </paper-card>
 <paper-tooltip for="cancel" position="top" offset="0"> cancel job </paper-tooltip>
@@ -163,6 +163,14 @@
           return true;
         }
       },
+      _deletejob: function(status){
+        if (status === "PENDING") {
+          return true;
+        }
+        else{
+          return false;
+        }
+      },
       _viewlog: function(status){
         if (status === "REVOKED") {
           return true;
@@ -186,6 +194,23 @@
         data.append('jobname', this.job);
         $.ajax({
              url: '/cancel/',  //Server script to process data
+             type: 'POST',
+             data: data,
+             success: this.completeHandler,
+             error: this.errorHandler,
+             //Options to tell jQuery not to process data or worry about content-type.
+             cache: false,
+             contentType: false,
+             processData: false
+           });
+      },
+      
+    deletej: function(event){
+        event.stopPropagation();
+        var data = new FormData();
+        data.append('jobname', this.job);
+        $.ajax({
+             url: '/delete/',  //Server script to process data
              type: 'POST',
              data: data,
              success: this.completeHandler,

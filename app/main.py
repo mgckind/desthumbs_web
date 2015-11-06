@@ -29,6 +29,7 @@ class Application(tornado.web.Application):
             (r"/mystatus/", results.StatusUserHandler),
             (r"/single/", download.DownloadHandler),
             (r"/cancel/", results.CancelHandler),
+            (r"/delete/", results.DeleteHandler),
             (r"/deslabs", tornado.web.RedirectHandler,
         dict(url="http://deslabs.ncsa.illinois.edu/")),
         ]
