@@ -68,8 +68,8 @@ class AuthLoginHandler(BaseHandler):
 
     def set_current_user(self, user, passwd):
         if user:
-            self.set_secure_cookie("user", tornado.escape.json_encode(user), expires_days = 1)
-            self.set_secure_cookie("pass", tornado.escape.json_encode(passwd), expires_days = 1)
+            self.set_secure_cookie("user", tornado.escape.json_encode(user), expires_days = 5)
+            self.set_secure_cookie("pass", tornado.escape.json_encode(passwd), expires_days = 5)
         else:
             self.clear_cookie("user")
             self.clear_cookie("pass")

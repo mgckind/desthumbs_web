@@ -59,7 +59,7 @@ def desthumb(inputs, user, passwd, outputs,xs,ys, siid, tiid, user_folder, listo
     # writing files for wget
     allfiles = glob.glob(user_folder+'results/'+siid+'/*.*')
     Fall = open(user_folder+'results/'+siid+'/list_all.txt','w')
-    prefix='http://desdev2.cosmology.illinois.edu:8888/static'
+    prefix='http://desdev2.cosmology.illinois.edu/static'
     for ff in allfiles:
         if (ff.find('all.tar.gz')==-1 & ff.find('list.json')==-1): Fall.write(prefix+ff.split('static')[-1]+'\n')
     Fall.close()
