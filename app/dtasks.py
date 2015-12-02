@@ -33,7 +33,7 @@ def desthumb(inputs, infoP, outputs,xs,ys, siid, tiid, user_folder, listonly):
     #A=BaseHandler()
     #print(A.current_user)
     oo = subprocess.check_output([com],shell=True)
-    mypath = '/static/uploads/'+user+'/results/'+siid+'/'
+    mypath = '/static/uploads/'+infoP._uu+'/results/'+siid+'/'
 
 
     if listonly == 'yes':
