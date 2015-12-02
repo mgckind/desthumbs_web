@@ -25,8 +25,8 @@ celery = Celery('dtasks')
 celery.config_from_object('celeryconfig')
 
 @celery.task
-def desthumb(inputs, user, passwd, outputs,xs,ys, siid, tiid, user_folder, listonly):
-    com =  "makeDESthumbs  %s --user %s --password %s --MP --outdir=%s" % (inputs, user, passwd, outputs)
+def desthumb(inputs, infoP, outputs,xs,ys, siid, tiid, user_folder, listonly):
+    com =  "makeDESthumbs  %s --user %s --password %s --MP --outdir=%s" % (inputs, infoP._uu, infoP._pp, outputs)
     if xs != "": com += ' --xsize %s ' % xs
     if ys != "": com += ' --ysize %s ' % ys
     com2 = '/root/DES/desth/app/task2 30'

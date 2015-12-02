@@ -12,12 +12,17 @@ import glob
 import json
 import dtasks
 import datetime
-
+import stat
 
 
 class BaseHandler(tornado.web.RequestHandler): 
     def get_current_user(self):
         return self.get_secure_cookie("user")
+
+class infoP(object):
+    def __init__(self, uu, pp):
+        self._uu=u
+        self._pp=pp
 
 class FileHandler(BaseHandler):
     @tornado.web.authenticated
@@ -36,8 +41,6 @@ class FileHandler(BaseHandler):
         print '+-+-+-+-',ys
         listonly = self.get_argument("listonly")
         print '+-+-+-+-',listonly
-        print 
-        print self.current_user
 
         sendemail = self.get_argument("sendemail")
         toemail = self.get_argument("toemail")
@@ -64,6 +67,7 @@ class FileHandler(BaseHandler):
         #RUN DESTHUMBS
         loc_passw = self.get_secure_cookie("pass").replace('\"','')
         loc_user = self.get_secure_cookie("user").replace('\"','')
+        infP=infoP(loc_user,loc_passwd) 
         #comm = "makeDESthumbs  %s --user %s --password %s --MP --outdir=%s" % (user_folder + cname, loc_user, loc_passw, user_folder+'results/')
         #if xs != "": comm += ' --xsize %s ' % xs
         #if ys != "": comm += ' --ysize %s ' % ys
@@ -74,10 +78,10 @@ class FileHandler(BaseHandler):
         tiid = loc_user+'__'+cname[:-4]+'_{'+now.ctime()+'}'
         if sendemail == 'yes':
             print 'Sending email to %s' % toemail
-            run=dtasks.desthumb.apply_async(args=[user_folder + cname, loc_user, loc_passw, user_folder+'results/'+siid+'/', xs,ys, siid, tiid, user_folder, listonly], task_id=tiid, link=dtasks.send_note.si(loc_user, tiid, toemail))
+            run=dtasks.desthumb.apply_async(args=[user_folder + cname, infP, user_folder+'results/'+siid+'/', xs,ys, siid, tiid, user_folder, listonly], task_id=tiid, link=dtasks.send_note.si(loc_user, tiid, toemail))
         else:
             print 'Not sending email'
-            run=dtasks.desthumb.apply_async(args=[user_folder + cname, loc_user, loc_passw, user_folder+'results/'+siid+'/', xs,ys, siid ,tiid,user_folder, listonly], task_id=tiid)
+            run=dtasks.desthumb.apply_async(args=[user_folder + cname, infP, user_folder+'results/'+siid+'/', xs,ys, siid ,tiid,user_folder, listonly], task_id=tiid)
 
         self.set_status(200)
         self.flush()
