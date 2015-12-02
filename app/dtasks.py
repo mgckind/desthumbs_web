@@ -19,7 +19,10 @@ class BaseHandler(tornado.web.RequestHandler):
         return self.get_secure_cookie("user")
 
 
-celery = Celery('dtasks', backend='redis://127.0.0.1:6379/0', broker='redis://127.0.0.1:6379/0')
+celery = Celery('dtasks')
+#celery = Celery('dtasks', backend='redis://127.0.0.1:6379/0', broker='redis://127.0.0.1:6379/0')
+#celery.conf.CELERY_TASK_RESULT_EXPIRES = 0
+celery.config_from_object('celeryconfig')
 
 @celery.task
 def desthumb(inputs, user, passwd, outputs,xs,ys, siid, tiid, user_folder, listonly):
