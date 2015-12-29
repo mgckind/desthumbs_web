@@ -102,7 +102,7 @@ class StatusUserHandler(BaseHandler):
                 jobstatus.append(cc.status)
                 jobdate.append(stime)
                 ftime = datetime.datetime.strptime(stime,'%a %b %d %H:%M:%S %Y')
-                jobelapsed.append((today-ftime).seconds)
+                jobelapsed.append((today-ftime).total_seconds())
                 
                 #self.write( '<a href="/status/'+t+'">'+t+'</a>  : ' + cc.status + '<br>')
         i=inspect()
@@ -121,7 +121,7 @@ class StatusUserHandler(BaseHandler):
                 jobstatus.append(cc.status)
                 jobdate.append(stime)
                 ftime = datetime.datetime.strptime(stime,'%a %b %d %H:%M:%S %Y')
-                jobelapsed.append((today-ftime).seconds)
+                jobelapsed.append((today-ftime).total_seconds())
 
                 #self.write( '<a href="/status/'+t+'">'+t+'</a>  : ' + cc.status + '<br>')
         jobnames=numpy.array(jobnames)
