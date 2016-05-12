@@ -89,11 +89,11 @@ class ApiHandler(tornado.web.RequestHandler):
                 sendemail = 'yes'
                 toemail = response2['email']
             if sendemail == 'yes':
-                #run=dtasks.desthumb.apply_async(args=[user_folder + cname, infP, user_folder+'results/'+siid+'/', xs,ys, siid, tiid, user_folder, listonly], task_id=tiid, link=dtasks.send_note.si(user, tiid, toemail))
+                run=dtasks.desthumb.apply_async(args=[user_folder + cname, infP, user_folder+'results/'+siid+'/', xs,ys, siid, tiid, user_folder, listonly], task_id=tiid, link=dtasks.send_note.si(user, tiid, toemail))
                 response2['message'] = 'Job %s submitted. Email sent to %s on completion' % (siid, toemail) 
                 response3['job'] = siid 
             else:
-                #run=dtasks.desthumb.apply_async(args=[user_folder + cname, infP, user_folder+'results/'+siid+'/', xs,ys, siid ,tiid,user_folder, listonly], task_id=tiid)
+                run=dtasks.desthumb.apply_async(args=[user_folder + cname, infP, user_folder+'results/'+siid+'/', xs,ys, siid ,tiid,user_folder, listonly], task_id=tiid)
                 response2['message'] = 'Job %s submitted.' % (siid)
                 response3['job'] = siid 
 
