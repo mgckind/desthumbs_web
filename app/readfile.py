@@ -32,15 +32,10 @@ class FileHandler(BaseHandler):
         #os.system('rm -f '+user_folder+'*.*')
         #os.system('rm -rf '+user_folder+'results/')
         check = self.get_argument("check")
-        print '+-+-+-+-',check
         id1 = self.get_argument("id")
-        print '+-+-+-+-',id1
         xs = self.get_argument("xsize")
-        print '+-+-+-+-',xs
         ys = self.get_argument("ysize")
-        print '+-+-+-+-',ys
         listonly = self.get_argument("listonly")
-        print '+-+-+-+-',listonly
 
         sendemail = self.get_argument("sendemail")
         toemail = self.get_argument("toemail")

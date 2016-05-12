@@ -11,6 +11,7 @@ import login
 import readfile
 import results
 import download
+import api
 
 define("port", default=8888, help="run on the given port", type=int)
 
@@ -30,6 +31,8 @@ class Application(tornado.web.Application):
             (r"/single/", download.DownloadHandler),
             (r"/cancel/", results.CancelHandler),
             (r"/delete/", results.DeleteHandler),
+            (r"/api/?", api.ApiHandler),
+            (r"/jobs/?", api.ApiJobHandler),
             (r"/deslabs", tornado.web.RedirectHandler,
         dict(url="http://deslabs.ncsa.illinois.edu/")),
         ]
