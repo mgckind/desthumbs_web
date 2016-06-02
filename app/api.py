@@ -4,6 +4,10 @@ import tornado.httpserver
 import tornado.ioloop
 import tornado.options
 import tornado.web
+from celery.result import AsyncResult
+from celery.task.control import inspect
+from celery.task.control import revoke
+import redis
 import Settings
 import cx_Oracle
 import pandas as pd
@@ -13,7 +17,8 @@ import datetime
 import dtasks
 import json
 from Settings import mysession
-
+from results import humantime
+from results import update_job_json
 
 dbConfig0 = Settings.dbConfig()
 ddbb= "desoper"
@@ -132,6 +137,9 @@ class ApiJobHandler(tornado.web.RequestHandler):
             response2['message'] = 'Need username'
 
         if response2['status'] == 'ok':
+            r=redis.StrictRedis(host='127.0.0.1', port=6379, db=0)
+            all_tasks = r.keys()
+            _ = update_job_json(all_tasks, user)
             jfile = user_folder + 'jobs.json'
             with open(jfile,'r') as jsonfile:
                 data = json.load(jsonfile)
