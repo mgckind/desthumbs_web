@@ -88,10 +88,12 @@ class ApiHandler(tornado.web.RequestHandler):
             if response2['status'] == 'ok':
                 if 'xsize' in response2:
                     xs_read = response2['xsize']
+                    if len(xs_read) == 1 : xs=xs*xs_read
                     if len(xs) >= len(xs_read): xs[0:len(xs_read)] = xs_read
                     else: xs = xs_read[0:len(xs)]
                 if 'ysize' in response2:
                     ys_read = response2['ysize']
+                    if len(ys_read) == 1 : ys=ys*ys_read
                     if len(ys) >= len(ys_read): ys[0:len(ys_read)] = ys_read
                     else: ys = ys_read[0:len(ys)]
                 listonly = ''
