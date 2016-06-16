@@ -63,7 +63,7 @@ class TokenHandler(tornado.web.RequestHandler):
             ttl = tokens.ttl(response2['token'])
             if ttl is None:
                 response2['status']='error'
-                response2['message']='Token does not exist ot it expired'
+                response2['message']='Token does not exist or it expired'
             else:
                 response2['status'] = 'ok'
                 response2['message'] = 'Token is valid for %s seconds' % str(round(ttl))
@@ -212,6 +212,18 @@ class ApiJobHandler(tornado.web.RequestHandler):
             rs = response[k]
             k = k.lower()
             response2[k] = rs
+        if 'token' in response2:
+            auths = tokens.get(response2['token'])
+            if auths is None:
+                response2['message'] = 'Token does not exist or it expired'
+            else:
+                user = auths[0]
+                passwd = auths[1]
+                newfolder = os.path.join(Settings.UPLOADS,user)
+                user_folder = newfolder + '/'
+                if not os.path.exists(newfolder):
+                    os.mkdir(newfolder)
+                response2['status'] = 'ok'
         if 'username' in response2:
             if 'password' not in response2:
                 response2['message'] = 'Need password'
@@ -226,7 +238,8 @@ class ApiJobHandler(tornado.web.RequestHandler):
                 else:
                     response2['message']=msg
         else:
-            response2['message'] = 'Need username'
+            if 'token' not in response2:
+                response2['message'] = 'Need username'
 
         if response2['status'] == 'ok':
             r=redis.StrictRedis(host='127.0.0.1', port=6379, db=0)
