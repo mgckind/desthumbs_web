@@ -32,7 +32,8 @@ class Application(tornado.web.Application):
             (r"/cancel/", results.CancelHandler),
             (r"/delete/", results.DeleteHandler),
             (r"/api/?", api.ApiHandler),
-            (r"/jobs/?", api.ApiJobHandler),
+            (r"/api/token/?", api.TokenHandler),
+            (r"/api/jobs/?", api.ApiJobHandler),
             (r"/deslabs", tornado.web.RedirectHandler,
         dict(url="http://deslabs.ncsa.illinois.edu/")),
         ]

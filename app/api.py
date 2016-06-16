@@ -19,10 +19,15 @@ import json
 from Settings import mysession
 from results import humantime
 from results import update_job_json
+from expiringdict import ExpiringDict
+import binascii
+import hashlib
 
 dbConfig0 = Settings.dbConfig()
 ddbb= "desoper"
 float_input = ['ra','dec','xsize','ysize']
+
+tokens = ExpiringDict(max_len=200, max_age_seconds=120)
 
 class infoP(object):
     def __init__(self, uu, pp):
@@ -44,22 +49,30 @@ class BaseHandler(tornado.web.RequestHandler):
     def get_current_user(self):
         return self.get_secure_cookie("user")
 
-class ApiHandler(tornado.web.RequestHandler):
+
+
+class TokenHandler(tornado.web.RequestHandler):
     @tornado.web.asynchronous
     def get(self):
         response = { k: self.get_argument(k) for k in self.request.arguments }
         response2 = {'status':'error', 'message':''}
         response3={}
-        print response.keys()
         for k in response.keys():
-            rs = response[k].replace('[','')
-            k = k.lower()
-            rs = rs.replace(']','')
-            if k in float_input:
-                print k,rs
-                response2[k]=[float(i) for i in rs.split(',')]
+            response2[k.lower()]=response[k]
+        if 'token' in response2:
+            ttl = tokens.ttl(response2['token'])
+            if ttl is None:
+                response2['status']='error'
+                response2['message']='Token does not exist ot it expired'
             else:
-                response2[k] = rs
+                response2['status'] = 'ok'
+                response2['message'] = 'Token is valid for %s seconds' % str(round(ttl))
+            self.write(response2)
+            self.set_status(200)
+            self.flush()
+            self.finish()
+            return
+                
         if 'username' in response2:
             if 'password' not in response2:
                 response2['message'] = 'Need password'
@@ -77,6 +90,67 @@ class ApiHandler(tornado.web.RequestHandler):
                     response2['message']=msg
         else:
             response2['message'] = 'Need username'
+        
+        if response2['status'] == 'ok':
+            response2['message'] = 'Token created, expiration is 24 hours'
+            #temp = binascii.hexlify(os.urandom(64))
+            temp = hashlib.sha1(os.urandom(64)).hexdigest()
+            tokens[temp] = [user,passwd]
+            response3['token']=temp 
+        response3['status']=response2['status']
+        response3['message']=response2['message']
+        self.write(response3)
+        self.set_status(200)
+        self.flush()
+        self.finish()
+       
+
+
+
+class ApiHandler(tornado.web.RequestHandler):
+    @tornado.web.asynchronous
+    def get(self):
+        response = { k: self.get_argument(k) for k in self.request.arguments }
+        response2 = {'status':'error', 'message':''}
+        response3={}
+        for k in response.keys():
+            rs = response[k].replace('[','')
+            k = k.lower()
+            rs = rs.replace(']','')
+            if k in float_input:
+                response2[k]=[float(i) for i in rs.split(',')]
+            else:
+                response2[k] = rs
+        if 'token' in response2:
+            auths = tokens.get(response2['token'])
+            if auths is None:
+                response2['message'] = 'Token does not exist or it expired'
+            else:
+                user = auths[0]
+                passwd = auths[1]
+                newfolder = os.path.join(Settings.UPLOADS,user)
+                user_folder = newfolder + '/'
+                if not os.path.exists(newfolder):
+                    os.mkdir(newfolder)
+                response2['status'] = 'ok'
+        if 'username' in response2:
+            if 'password' not in response2:
+                response2['message'] = 'Need password'
+            else:
+                user = response2['username']
+                passwd = response2['password']
+                check,msg = check_permission(passwd, user)
+                if check:
+                    response2['status']='ok'
+                    newfolder = os.path.join(Settings.UPLOADS,user)
+                    user_folder = newfolder + '/'
+                    if not os.path.exists(newfolder):
+                        os.mkdir(newfolder)
+                else:
+                    response2['message']=msg
+        else:
+            if 'token' not in response2:
+                response2['message'] = 'Need username'
         if response2['status'] == 'ok':
             ra = response2['ra']
             dec = response2['dec']
