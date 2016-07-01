@@ -27,7 +27,7 @@ dbConfig0 = Settings.dbConfig()
 ddbb= "desoper"
 float_input = ['ra','dec','xsize','ysize']
 
-tokens = ExpiringDict(max_len=200, max_age_seconds=120)
+tokens = ExpiringDict(max_len=200, max_age_seconds=3600)
 
 class infoP(object):
     def __init__(self, uu, pp):
@@ -92,7 +92,7 @@ class TokenHandler(tornado.web.RequestHandler):
             response2['message'] = 'Need username'
         
         if response2['status'] == 'ok':
-            response2['message'] = 'Token created, expiration is 24 hours'
+            response2['message'] = 'Token created, expiration time: 1 hour'
             #temp = binascii.hexlify(os.urandom(64))
             temp = hashlib.sha1(os.urandom(64)).hexdigest()
             tokens[temp] = [user,passwd]
